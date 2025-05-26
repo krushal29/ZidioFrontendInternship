@@ -20,6 +20,9 @@
     "@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
     "@tailwindcss/vite": "^4.1.7",
     "lucide-react": "^0.511.0",
+
+
+    "react-scroll": "^1.9.3",
     "router": "^2.2.0"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
-// import React, { useState, useEffect } from "react";
+// import React, { useState } from "react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+// import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
@@ -9,14 +10,22 @@
 //     fullname: "",
 //     email: "",
 //     password: "",
+//     role: "user", // Default role
 //   });
 
+//   const [isAdmin, setIsAdmin] = useState(false);
 //   const [error, setError] = useState("");
 //   const [success, setSuccess] = useState("");
 //   const navigate = useNavigate();
 
 //   const handleChange = (e) => {
 //     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const toggleRole = () => {
+//     const role = isAdmin ? "user" : "admin";
+//     setIsAdmin(!isAdmin);
+//     setFormData({ ...formData, role });
 //   };
 
 //   const handleSubmit = async (e) => {
@@ -30,7 +39,8 @@
 //       });
 
 //       setSuccess(response.data.message);
-//       setFormData({ fullname: "", email: "", password: "" });
+//       setFormData({ fullname: "", email: "", password: "", role: "user" });
+//       setIsAdmin(false);
 //       navigate("/customer-dashboard");
 //     } catch (err) {
 //       setError(err.response?.data?.error || "Registration failed!");
@@ -38,26 +48,31 @@
 //   };
 
 //   return (
-//     <section
-//       className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-lg bg-gradient-to-br from-[#81c3d7] via-[#3a7ca5] to-[#0582ca] z-50"
-//     >
+//     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-lg bg-gradient-to-br from-[#81c3d7] via-[#3a7ca5] to-[#0582ca] z-50">
 //       <div className="w-[90vw] max-w-md bg-white shadow-lg rounded-xl p-8">
-//         <h2 className="text-3xl font-bold text-[#064848] mt-2 text-center mb-6">
-//           Customer Signup
+//         <h2 className="text-3xl font-bold text-[#006494] text-center mb-6">
+//           {isAdmin ? "Admin Signup" : "Customer Signup"}
 //         </h2>
-
-//         <button
-//           className="absolute top-6 right-6 text-gray-500 text-xl font-bold"
-//           onClick={() => navigate("/")}
-//         >
-//           ✖
-//         </button>
 
 //         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 //         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
+//         {/* Role Toggle */}
+//         <div className="flex justify-center items-center mb-4">
+//           <label className="mr-2 text-sm font-medium text-gray-600">Register as:</label>
+//           <button
+//             onClick={toggleRole}
+//             className={`px-4 py-2 rounded-full text-sm font-semibold ${
+//               isAdmin
+//                 ? "bg-[#006494] text-white"
+//                 : "bg-gray-200 text-gray-800"
+//             } transition`}
+//           >
+//             {isAdmin ? "Admin" : "Customer"}
+//           </button>
+//         </div>
+
 //         <form className="flex flex-col gap-4 text-gray-600" onSubmit={handleSubmit}>
-//           {/* Full Name */}
 //           <div className="relative">
 //             <FontAwesomeIcon icon={faUser} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
 //             <input
@@ -71,7 +86,6 @@
 //             />
 //           </div>
 
-//           {/* Email */}
 //           <div className="relative">
 //             <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
 //             <input
@@ -85,7 +99,6 @@
 //             />
 //           </div>
 
-//           {/* Password */}
 //           <div className="relative">
 //             <FontAwesomeIcon icon={faLock} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
 //             <input
@@ -101,28 +114,58 @@
 
 //           <button
 //             type="submit"
-//             className="bg-[#064848] text-white font-semibold text-lg py-3 rounded-lg hover:bg-[#056b6b] transition duration-300"
+//             className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
 //           >
-//             Register as Customer
+//             Register as {isAdmin ? "Admin" : "Customer"}
 //           </button>
 
 //           <p className="text-center text-sm text-gray-500">
 //             Already have an account?{" "}
 //             <button
 //               type="button"
-//               className="text-[#064848] hover:underline font-semibold"
+//               className="text-[#006494] cursor-pointer hover:underline font-semibold"
 //               onClick={() => navigate("/login")}
 //             >
 //               Login
 //             </button>
 //           </p>
 //         </form>
+
+//         <div className="mt-6 text-center">
+//           <p className="text-gray-600 mb-4">Or continue with</p>
+//           <div className="flex justify-center gap-4">
+//             <button
+//               className="flex items-center cursor-pointer gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition"
+//               onClick={() => alert("Google Sign-in")}
+//             >
+//               <FontAwesomeIcon icon={faGoogle} className="text-red-500" />
+//               Google
+//             </button>
+//             <button
+//               className="flex items-center cursor-pointer gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition"
+//               onClick={() => alert("GitHub Sign-in")}
+//             >
+//               <FontAwesomeIcon icon={faGithub} className="text-black" />
+//               GitHub
+//             </button>
+//           </div>
+//         </div>
+
+//         <div className="mt-6 text-center">
+//           <button
+//             onClick={() => navigate("/")}
+//             className="text-[#006494] cursor-pointer font-medium hover:underline"
+//           >
+//             ← Back to Home
+//           </button>
+//         </div>
 //       </div>
 //     </section>
 //   );
 // };
 
 // export default Signup;
+
 
 
 import React, { useState } from "react";
@@ -137,6 +180,7 @@ const Signup = () => {
     fullname: "",
     email: "",
     password: "",
+    role: "user", // default role is user
   });
 
   const [error, setError] = useState("");
@@ -145,6 +189,13 @@ const Signup = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const toggleRole = () => {
+    setFormData((prev) => ({
+      ...prev,
+      role: prev.role === "user" ? "admin" : "user",
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -158,7 +209,7 @@ const Signup = () => {
       });
 
       setSuccess(response.data.message);
-      setFormData({ fullname: "", email: "", password: "" });
+      setFormData({ fullname: "", email: "", password: "", role: "user" });
       navigate("/customer-dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed!");
@@ -174,6 +225,21 @@ const Signup = () => {
 
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
+
+        {/* Role Toggle */}
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <span className={`text-sm font-medium ${formData.role === "user" ? "text-[#006494]" : "text-gray-400"}`}>Customer</span>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={formData.role === "admin"}
+              onChange={toggleRole}
+            />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-amber-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600 relative"></div>
+          </label>
+          <span className={`text-sm font-medium ${formData.role === "admin" ? "text-[#006494]" : "text-gray-400"}`}>Admin</span>
+        </div>
 
         <form className="flex flex-col gap-4 text-gray-600" onSubmit={handleSubmit}>
           <div className="relative">
@@ -217,9 +283,9 @@ const Signup = () => {
 
           <button
             type="submit"
-            className=" text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
+            className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
           >
-            Register as Customer
+            {formData.role === "admin" ? "Register as Admin" : "Register as Customer"}
           </button>
 
           <p className="text-center text-sm text-gray-500">
@@ -254,7 +320,6 @@ const Signup = () => {
           </div>
         </div>
 
-        {/* Back to Home */}
         <div className="mt-6 text-center">
           <button
             onClick={() => navigate("/")}
@@ -269,4 +334,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
