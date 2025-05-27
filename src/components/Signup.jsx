@@ -10,10 +10,8 @@
 //     fullname: "",
 //     email: "",
 //     password: "",
-//     role: "user", // Default role
 //   });
 
-//   const [isAdmin, setIsAdmin] = useState(false);
 //   const [error, setError] = useState("");
 //   const [success, setSuccess] = useState("");
 //   const navigate = useNavigate();
@@ -23,9 +21,10 @@
 //   };
 
 //   const toggleRole = () => {
-//     const role = isAdmin ? "user" : "admin";
-//     setIsAdmin(!isAdmin);
-//     setFormData({ ...formData, role });
+//     setFormData((prev) => ({
+//       ...prev,
+//       role: prev.role === "user" ? "admin" : "user",
+//     }));
 //   };
 
 //   const handleSubmit = async (e) => {
@@ -40,7 +39,6 @@
 
 //       setSuccess(response.data.message);
 //       setFormData({ fullname: "", email: "", password: "", role: "user" });
-//       setIsAdmin(false);
 //       navigate("/customer-dashboard");
 //     } catch (err) {
 //       setError(err.response?.data?.error || "Registration failed!");
@@ -51,25 +49,25 @@
 //     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-lg bg-gradient-to-br from-[#81c3d7] via-[#3a7ca5] to-[#0582ca] z-50">
 //       <div className="w-[90vw] max-w-md bg-white shadow-lg rounded-xl p-8">
 //         <h2 className="text-3xl font-bold text-[#006494] text-center mb-6">
-//           {isAdmin ? "Admin Signup" : "Customer Signup"}
+//           Signup
 //         </h2>
 
 //         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 //         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
 //         {/* Role Toggle */}
-//         <div className="flex justify-center items-center mb-4">
-//           <label className="mr-2 text-sm font-medium text-gray-600">Register as:</label>
-//           <button
-//             onClick={toggleRole}
-//             className={`px-4 py-2 rounded-full text-sm font-semibold ${
-//               isAdmin
-//                 ? "bg-[#006494] text-white"
-//                 : "bg-gray-200 text-gray-800"
-//             } transition`}
-//           >
-//             {isAdmin ? "Admin" : "Customer"}
-//           </button>
+//         <div className="flex items-center justify-center gap-4 mb-4">
+//           <span className={`text-sm font-medium ${formData.role === "user" ? "text-[#006494]" : "text-gray-400"}`}>Customer</span>
+//           <label className="relative inline-flex items-center cursor-pointer">
+//             <input
+//               type="checkbox"
+//               className="sr-only peer"
+//               checked={formData.role === "admin"}
+//               onChange={toggleRole}
+//             />
+//             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-amber-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600 relative"></div>
+//           </label>
+//           <span className={`text-sm font-medium ${formData.role === "admin" ? "text-[#006494]" : "text-gray-400"}`}>Admin</span>
 //         </div>
 
 //         <form className="flex flex-col gap-4 text-gray-600" onSubmit={handleSubmit}>
@@ -116,7 +114,7 @@
 //             type="submit"
 //             className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
 //           >
-//             Register as {isAdmin ? "Admin" : "Customer"}
+//             {formData.role === "admin" ? "Register as Admin" : "Register as Customer"}
 //           </button>
 
 //           <p className="text-center text-sm text-gray-500">
@@ -167,7 +165,6 @@
 // export default Signup;
 
 
-
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -180,9 +177,9 @@ const Signup = () => {
     fullname: "",
     email: "",
     password: "",
-    role: "user", // default role is user
   });
 
+  const [userType, setUserType] = useState("customer"); // 'customer' or 'admin'
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -191,11 +188,8 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const toggleRole = () => {
-    setFormData((prev) => ({
-      ...prev,
-      role: prev.role === "user" ? "admin" : "user",
-    }));
+  const toggleUserType = () => {
+    setUserType((prev) => (prev === "customer" ? "admin" : "customer"));
   };
 
   const handleSubmit = async (e) => {
@@ -204,13 +198,19 @@ const Signup = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post("http://localhost:5000/register/register", formData, {
+      const endpoint =
+        userType === "admin"
+          ? "http://localhost:5000/admin/register"
+          : "http://localhost:5000/customer/register";
+
+      const response = await axios.post(endpoint, formData, {
         headers: { "Content-Type": "application/json" },
       });
 
       setSuccess(response.data.message);
-      setFormData({ fullname: "", email: "", password: "", role: "user" });
-      navigate("/customer-dashboard");
+      setFormData({ fullname: "", email: "", password: "" });
+
+      navigate(userType === "admin" ? "/admin-dashboard" : "/customer-dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed!");
     }
@@ -220,25 +220,25 @@ const Signup = () => {
     <section className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-lg bg-gradient-to-br from-[#81c3d7] via-[#3a7ca5] to-[#0582ca] z-50">
       <div className="w-[90vw] max-w-md bg-white shadow-lg rounded-xl p-8">
         <h2 className="text-3xl font-bold text-[#006494] text-center mb-6">
-          Signup
+          {userType === "admin" ? "Admin Signup" : "Customer Signup"}
         </h2>
 
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
 
-        {/* Role Toggle */}
+        {/* User Type Switch */}
         <div className="flex items-center justify-center gap-4 mb-4">
-          <span className={`text-sm font-medium ${formData.role === "user" ? "text-[#006494]" : "text-gray-400"}`}>Customer</span>
+          <span className={`text-sm font-medium ${userType === "customer" ? "text-[#006494]" : "text-gray-400"}`}>Customer</span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
               className="sr-only peer"
-              checked={formData.role === "admin"}
-              onChange={toggleRole}
+              checked={userType === "admin"}
+              onChange={toggleUserType}
             />
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-amber-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600 relative"></div>
           </label>
-          <span className={`text-sm font-medium ${formData.role === "admin" ? "text-[#006494]" : "text-gray-400"}`}>Admin</span>
+          <span className={`text-sm font-medium ${userType === "admin" ? "text-[#006494]" : "text-gray-400"}`}>Admin</span>
         </div>
 
         <form className="flex flex-col gap-4 text-gray-600" onSubmit={handleSubmit}>
@@ -285,7 +285,7 @@ const Signup = () => {
             type="submit"
             className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
           >
-            {formData.role === "admin" ? "Register as Admin" : "Register as Customer"}
+            {userType === "admin" ? "Register as Admin" : "Register as Customer"}
           </button>
 
           <p className="text-center text-sm text-gray-500">
@@ -300,6 +300,7 @@ const Signup = () => {
           </p>
         </form>
 
+        {/* Social Login */}
         <div className="mt-6 text-center">
           <p className="text-gray-600 mb-4">Or continue with</p>
           <div className="flex justify-center gap-4">
