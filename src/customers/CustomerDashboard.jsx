@@ -5,6 +5,7 @@ const CustomerDashboard = () => {
   return (
     <div>
       <Sidebar/>
+      
     </div>
   )
 }

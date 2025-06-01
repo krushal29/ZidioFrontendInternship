@@ -39,7 +39,7 @@ const Home = () => {
             <div className="w-full flex justify-between items-center">
                 <div className="flex items-center gap-3">
 
-                    <div className="text-white text-2xl font-bold montserrat-mont">Excellytics</div>
+                    <div className="text-white text-2xl font-bold montserrat-mont">ExcelFlow</div>
                 </div>
                 <ul className="flex space-x-3">
                     <li className="text-white flex gap-2 items-center hover:text-[#81dede] cursor-pointer text-xl px-4 py-2 rounded-full hover:bg-[#0d3733] hover:scale-105 transform duration-300 ease-in-out">
@@ -52,7 +52,7 @@ const Home = () => {
                     
                         <button
                             className="text-[#0d3733] bg-white flex gap-2 items-center hover:text-[#81dede] cursor-pointer text-lg px-4 py-2 rounded-full hover:bg-[#0d3733] hover:scale-105 transform duration-300 ease-in-out font-bold"
-                            onClick={() => setIsSignupOpen(true)}
+                           
                         >
                             <FontAwesomeIcon icon={faUserPlus} className='fa-solid text-lg' />SignUp
                         </button>
@@ -81,7 +81,7 @@ const Home = () => {
 
  
     <div 
-                className="w-full min-h-screen bg-no-repeat bg-cover bg-[#006494] bg-center flex justify-end p-8 items-center poppins" 
+                className="w-full min-h-screen bg-no-repeat bg-cover bg-[#006494] bg-center flex justify-end p-8  items-center poppins" 
                 style={{
                     backgroundImage: `
                         linear-gradient(to right, rgba(0, 0, 0, 0.5) 20%, rgba(0, 0, 0, 0.9) 70%),
@@ -94,7 +94,7 @@ const Home = () => {
                 <div className='flex flex-col gap-5 text-right w-[55%] relative justify-center items-end '>
                     <h1 className='font-extrabold  text-7xl text-[#81dede] montserrat-mont' 
                         style={{ textShadow: "3px 3px 5px rgba(0, 0, 0, 0.8)" }}>
-                        Excellytics
+                        ExcelFlow
                     </h1>
                     <p className='font-bold text-2xl text-white poppins-medium' 
                         style={{ textShadow: "3px 3px 5px rgba(0, 0, 0, 0.8)" }}>

@@ -19,7 +19,6 @@ const App = () => {
           <Route path="/Signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/customer-dashboard" element={<CustomerDashboard/>}/>
-          {/* Add other routes here as needed */}
         </Routes>
         
     </div>
