@@ -60,7 +60,7 @@ const Sidebar = () => {
     <div className="w-72 h-screen fixed top-0 left-0 bg-[#006494] text-white shadow-lg flex flex-col">
 
       <div className="mt-6 px-6 text-sm">
-          <h1 className="text-2xl font-bold montserrat-mont">Welcome, {user.name || "User"}!</h1>
+          <h1 className="text-2xl font-bold montserrat-mont">Welcome, {user.name || "User"}</h1>
           <p className="text-sm poppins-medium">{user.email || "No email available"}</p>
         </div>
 
