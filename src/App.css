@@ -8,6 +8,13 @@
   font-style: normal;
 }
 
+.montserrat-mont1 {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
 .poppins-medium {
   font-family: "Poppins", sans-serif;
   font-weight: 500;

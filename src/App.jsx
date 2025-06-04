@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import Signup from './components/Signup';
 import  Login from './components/Login';
 import CustomerDashboard from './customers/CustomerDashboard';
+import Files from './customers/Files';
+import UploadFile from './customers/UploadFile';
 
 
 const App = () => {
@@ -19,6 +21,8 @@ const App = () => {
           <Route path="/Signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/customer-dashboard" element={<CustomerDashboard/>}/>
+          <Route path="/files" element={<Files />} />
+          <Route path="/upload" element={<UploadFile />} />
         </Routes>
         
     </div>
