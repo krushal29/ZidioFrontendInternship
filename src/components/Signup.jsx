@@ -114,14 +114,18 @@ const Signup = () => {
         <div className="mt-6 text-center">
                   <p className="text-gray-600 mb-4">Or continue with</p>
                   <div className="flex justify-center gap-4">
+                    <a href="http://localhost:80/api/user/google">
                     <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
                       <FontAwesomeIcon icon={faGoogle} className="text-red-500" />
                       Google
                     </button>
+                    </a>
+                    <a href="http://localhost:80/api/user/github">
                     <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
                       <FontAwesomeIcon icon={faGithub} className="text-black" />
                       GitHub
                     </button>
+                    </a>
                   </div>
                 </div>
         <div className="mt-6 text-center">

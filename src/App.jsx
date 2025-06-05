@@ -8,6 +8,7 @@ import  Login from './components/Login';
 import CustomerDashboard from './customers/CustomerDashboard';
 import Files from './customers/Files';
 import UploadFile from './customers/UploadFile';
+import OAuthSuccess from './components/OAuthSuccess';
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/customer-dashboard" element={<CustomerDashboard/>}/>
           <Route path="/files" element={<Files />} />
           <Route path="/upload" element={<UploadFile />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
         </Routes>
         
     </div>

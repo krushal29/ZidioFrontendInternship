@@ -39,13 +39,13 @@ const Home = () => {
             <div className="w-full flex justify-between items-center">
                 <div className="flex items-center gap-3">
 
-                    <div className="text-white text-2xl font-bold montserrat-mont">ExcelFlow</div>
+                    <div className="text-white text-2xl font-bold montserrat-mont1">ExcelFlow</div>
                 </div>
                 <ul className="flex space-x-3">
-                    <li className="text-white flex gap-2 items-center hover:text-[#81dede] cursor-pointer text-xl px-4 py-2 rounded-full hover:bg-[#0d3733] hover:scale-105 transform duration-300 ease-in-out">
+                    <li className="text-white flex gap-2 items-center hover:text-[#81dede] cursor-pointer text-xl px-4 py-2 font-semibold rounded-full hover:bg-[#0d3733] hover:scale-105 transform duration-300 ease-in-out">
                         <FontAwesomeIcon icon={faHome} className='fa-solid text-white text-xl ' />Home
                     </li>
-                    <li className="text-white flex gap-2 items-center hover:text-[#81dede] cursor-pointer text-xl px-4 py-2 rounded-full hover:bg-[#0d3733] hover:scale-105 transform duration-300 ease-in-out">
+                    <li className="text-white flex gap-2 items-center hover:text-[#81dede] cursor-pointer text-xl px-4 py-2 font-semibold rounded-full hover:bg-[#0d3733] hover:scale-105 transform duration-300 ease-in-out">
                         <FontAwesomeIcon icon={faCalendarCheck} className='fa-solid text-white text-xl' />Features
                     </li>
                     
@@ -92,7 +92,7 @@ const Home = () => {
                 }}
             >
                 <div className='flex flex-col gap-5 text-right w-[55%] relative justify-center items-end '>
-                    <h1 className='font-extrabold  text-7xl text-[#81dede] montserrat-mont' 
+                    <h1 className='font-extrabold  text-7xl text-[#81dede] montserrat-mont1' 
                         style={{ textShadow: "3px 3px 5px rgba(0, 0, 0, 0.8)" }}>
                         ExcelFlow
                     </h1>

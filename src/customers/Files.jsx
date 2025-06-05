@@ -19,7 +19,7 @@ const Files = () => {
       });
 
       if (res.data.data) {
-        setFiles(res.data.message); // message contains file data
+        setFiles(res.data.message); 
       }
     } catch (err) {
       console.error("Failed to fetch files", err);
