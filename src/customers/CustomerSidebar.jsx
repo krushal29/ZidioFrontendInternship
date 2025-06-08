@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BarChart2, FileText, Upload, LogOut } from "lucide-react";
+import { BarChart2, FileText, Upload, LogOut, ChartBar, LayoutDashboard } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { faFile } from "@fortawesome/free-solid-svg-icons";
+import { Chart } from "chart.js";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const navItems = [
-    { name: "Dashboard", icon: <BarChart2 size={20} />, path: "/customer-dashboard" },
+    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/customer-dashboard" },
     { name: "Upload File", icon: <Upload size={20} />, path: "/upload" },
+    { name: "Analyze Data", icon: <BarChart2 size={20} />, path: "/analyze-data" },
     { name: "My Files", icon: <FileText size={20} />, path: "/files" },
   ];
 
@@ -57,13 +61,13 @@ const Sidebar = () => {
 
 
   return (
-    <div className="w-72 h-screen fixed top-0 left-0 bg-[#006494] text-white shadow-lg flex flex-col">
+    <div className="w-72 h-screen fixed top-0 left-0 bg-[#006494] text-white shadow-2xl rounded-tr-4xl flex flex-col">
 
       <div className="mt-6 px-6 text-sm">
           <h1 className="text-2xl font-bold montserrat-mont">Welcome, {user.name || "User"}</h1>
           <p className="text-sm poppins-medium">{user.email || "No email available"}</p>
         </div>
-
+<div className="border mt-6"></div>
       <nav className="flex-1 p-4 space-y-3 poppins-medium">
         {navItems.map((item) => (
           <Link

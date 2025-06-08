@@ -21,6 +21,13 @@
   font-style: normal;
 }
 
+.winky-sans {
+  font-family: "Winky Sans", sans-serif;
+  /* font-optical-sizing: 26px; */
+  font-weight: 600;
+  font-style: normal;
+}
+
 @keyframes shine {
   0% {
     left: -50%;

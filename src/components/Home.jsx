@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   UploadCloud,
   BarChart3,
@@ -44,6 +44,8 @@ const features = [
 ];
 
 const Home = () => {
+
+  const navigate = useNavigate()
   return (
     <div className="min-h-screen flex flex-col bg-[#FDF0D5] relative">
       {/* Navigation Bar - Fixed at top with highest z-index */}
@@ -55,14 +57,14 @@ const Home = () => {
             </div>
           </div>
           <ul className="flex space-x-4">
-            <li className="text-[#FDF0D5] flex gap-2 items-center hover:text-[#17BEBB] cursor-pointer text-xl px-5 py-2 rounded-full transition-all duration-300">
+            <li className="text-[#FDF0D5] flex gap-2 items-center font-semibold hover:bg-[#FDF0D5] hover:text-[#003049] cursor-pointer text-xl px-5 py-2 rounded-full transition-all duration-300">
               <FontAwesomeIcon icon={faHome} className="text-xl" /> Home
             </li>
-            <li className="text-[#FDF0D5] flex gap-2 items-center hover:text-[#17BEBB] cursor-pointer text-xl px-5 py-2 rounded-full transition-all duration-300">
+            <li className="text-[#FDF0D5] flex gap-2 items-center font-semibold hover:bg-[#FDF0D5] hover:text-[#003049] cursor-pointer text-xl px-5 py-2 rounded-full transition-all duration-300">
               <FontAwesomeIcon icon={faCalendarCheck} className="text-xl" />{" "}
               Features
             </li>
-            <button className="text-[#003049] bg-[#FDF0D5] hover:bg-[#17BEBB] hover:text-[#FDF0D5] flex gap-2 items-center cursor-pointer text-lg px-6 py-2 rounded-full transition-all duration-300 font-bold border-2 border-[#003049]">
+            <button onClick={() => navigate("/signup")} className="text-[#003049] bg-[#FDF0D5]  hover:bg-[#003049] hover:text-[#FDF0D5] flex gap-2 items-center cursor-pointer text-lg px-6 py-2 rounded-full transition-all duration-300 font-bold border-2 border-[#003049]">
               <FontAwesomeIcon icon={faUserPlus} /> Sign Up
             </button>
           </ul>

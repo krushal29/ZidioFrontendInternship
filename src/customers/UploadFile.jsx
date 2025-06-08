@@ -146,9 +146,12 @@ const UploadFile = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-28 p-8 bg-white shadow-lg rounded-lg relative">
-      <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#ffffff_40%,#006494_100%)]"></div>
+    <div className="max-w-4xl mx-auto mt-28 p-8  shadow-lg rounded-lg relative">
+      {/* <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div> */}
+
       <Sidebar />
+        <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div>
+
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">📤 Upload Excel File</h1>
 
       <div
@@ -172,7 +175,7 @@ const UploadFile = () => {
       <form onSubmit={handleSubmit} className="mt-6 text-center">
         <button
           type="submit"
-          className="bg-[#1b79a5] hover:bg-[#006494] text-white px-6 py-3 rounded-lg shadow-md hover:scale-110 transform duration-300 ease-in-out font-bold"
+          className="bg-[#1b79a5] hover:bg-[#006494] text-white cursor-pointer px-6 py-3 rounded-lg shadow-md hover:scale-110 transform duration-300 ease-in-out font-bold"
         >
           Upload File
         </button>
