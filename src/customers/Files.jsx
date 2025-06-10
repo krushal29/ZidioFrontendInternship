@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Trash2, Eye } from "lucide-react";
 import Sidebar from './CustomerSidebar'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Files = () => {
   const [files, setFiles] = useState([]);
@@ -39,11 +42,14 @@ const Files = () => {
 
       if (res.data.success) {
         setFiles(files.filter((file) => file._id !== fileId));
+        toast.success(" File deleted successfully!");
       } else {
-        alert("Failed to delete the file.");
+        // alert("Failed to delete the file.");
+        toast.error("Failed to delete file.");
       }
     } catch (err) {
-      console.error("Delete failed", err);
+      // console.error("Delete failed", err);
+      toast.error("Failed to delete file.");
     }
   };
 
@@ -52,14 +58,15 @@ const Files = () => {
   return (
     <div className="ml-72 p-6">
         <Sidebar/>
-        <div class="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div class="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div>
+        <ToastContainer position="top-right" toastStyle={{ backgroundColor: "black", color: "white" }} autoClose={3000} hideProgressBar={false} />
+        <div class="absolute inset-0 -z-10 h-full w-full bg-gray-200 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div class="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div>
       <h1 className="text-2xl font-bold montserrat-mont1 mb-4">📁 My Files</h1>
       {files.length === 0 ? (
         <p className="text-gray-600">No files uploaded yet.</p>
       ) : (
         <div className="space-y-4">
           {files.map((file) => (
-            <div key={file._id} className="flex justify-between items-center bg-white p-4 shadow-2xl rounded">
+            <div key={file._id} className="flex justify-between items-center bg-gray-100 p-4 shadow-2xl rounded-lg">
               <div>
                 <p className="font-semibold montserrat-mont">{file.FileName}</p>
                 <p className="text-sm text-gray-500">{(file.FileSize / 1024).toFixed(2)} KB</p>

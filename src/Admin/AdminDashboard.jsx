@@ -1,98 +1,15 @@
-// import React from "react";
-// import { useNavigate } from "react-router-dom";
-// import {
-//   FaUserShield,
-//   FaChartBar,
-//   FaFileAlt,
-//   FaSignOutAlt,
-// } from "react-icons/fa";
-
-
-// const AdminDashboard = () => {
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     localStorage.clear();
-//     navigate("/admin-login");
-//   };
-
-//   return (
-//     <div className="flex h-screen">
-//       {/* Sidebar */}
-// <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-//   <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#9EF2E4,transparent)]"></div>
-// </div>
-
-//       <div className="w-72 bg-teal-700 text-white flex flex-col px-6 rounded-tr-4xl shadow-3xl">
-//         <div className="text-2xl font-bold p-6 border-b border-white montserrat-mont1">
-//           Admin Panel
-//         </div>
-//         <nav className="flex-1 px-4 py-6 space-y-4">
-//           <button className="flex poppins-medium items-center rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-blue-600">
-//             <FaUserShield size={20} /> Users
-//           </button>
-//           <button className="flex poppins-medium items-center rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-yellow-600">
-//             <FaChartBar size={20}/> Analytics
-//           </button>
-//           <button className="flex items-center poppins-medium rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-yellow-600">
-//             <FaFileAlt size={20}/> Reports
-//           </button>
-//         </nav>
-//         <div className="p-4 border-t border-blue-800">
-//           <button
-//             onClick={handleLogout}
-//             className="flex items-center gap-2 text-left w-full hover:text-red-300"
-//           >
-//             <FaSignOutAlt /> Logout
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Main Content */}
-//       <div className="flex-1 p-8 overflow-y-auto">
-//         <h1 className="text-3xl font-bold text-gray-800 mb-6 montserrat-mont1">
-//           Welcome, Admin
-//         </h1>
-
-//         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-//           <div className="bg-blue-100 rounded-lg shadow p-6">
-//             <h2 className="text-xl font-semibold text-gray-700 mb-2 poppins-medium">
-//               Total Users
-//             </h2>
-//             <p className="text-3xl font-bold text-blue-600 winky-sans">128</p>
-//           </div>
-//           <div className="bg-green-100 rounded-lg shadow p-6">
-//             <h2 className="text-xl font-semibold text-gray-700 mb-2">
-//               Reports Reviewed
-//             </h2>
-//             <p className="text-3xl font-bold text-green-600 winky-sans">42</p>
-//           </div>
-//           <div className="bg-purple-100 rounded-lg shadow p-6">
-//             <h2 className="text-xl font-semibold text-gray-700 mb-2">
-//               Active Sessions
-//             </h2>
-//             <p className="text-3xl font-bold text-purple-600 winky-sans">5</p>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
-
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import { Sidebar } from "lucide-react";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   const token = localStorage.getItem("token");
 
@@ -125,14 +42,17 @@ useEffect(() => {
 
 
   const fetchUsers = async () => {
+    setLoading(true);
   try {
     const res = await axios.get("http://localhost:80/api/admin/users", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log("API response:", res.data);
+    // console.log("API response:", res.data);
     setUsers(res.data.users || []); 
   } catch (err) {
     console.error("Error fetching users:", err);
+  }finally {
+    setLoading(false);
   }
 };
 
@@ -143,8 +63,10 @@ useEffect(() => {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();
+      toast.success("User removed successfully!");
     } catch (err) {
-      console.error("Error deleting user:", err);
+      // console.error("Error deleting user:", err);
+      toast.error("Failed to remove user.");
     }
   };
 
@@ -160,30 +82,44 @@ useEffect(() => {
     }
   };
 
-  
-
-
-
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
+
+  const [adminName, setAdminName] = useState("");
+useEffect(() => {
+  const userData = localStorage.getItem("user");
+
+  if (userData) {
+    try {
+      const user = JSON.parse(userData);
+      setAdminName(user.name || "Admin");
+    } catch (error) {
+      console.error("Error parsing admin user data:", error);
+    }
+  } else {
+    console.warn("No user data found in localStorage");
+  }
+}, []);
+
+
+
+
   return (
     <div className="flex h-screen">
       <AdminSidebar/>
+      <ToastContainer position="top-right" toastStyle={{ backgroundColor: "black", color: "white" }} autoClose={3000} hideProgressBar={false} />
       {/* Background Grid */}
       <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#9EF2E4,transparent)]"></div>
       </div>
 
-      {/* Sidebar */}
-      
-
       {/* Main Content */}
       <div className="flex-1 p-8 overflow-y-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 montserrat-mont1">
-          Welcome, Admin
+          Welcome, {adminName}
         </h1>
 
         {/* Dashboard Cards */}
@@ -247,7 +183,7 @@ useEffect(() => {
                 {Array.isArray(users) && users.length === 0 && (
                   <tr>
                     <td colSpan="4" className="py-4 text-center text-gray-500">
-                      No users found.
+                      {loading ? "Fetching users..." : "No user found"}
                     </td>
                   </tr>
                 )}

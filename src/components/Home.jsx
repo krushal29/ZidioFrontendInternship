@@ -52,7 +52,7 @@ const Home = () => {
       <nav className="w-full fixed top-0 z-50 bg-[#003049] py-4 px-8 poppins shadow-lg">
         <div className="w-full flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="text-[#FDF0D5] text-3xl font-bold montserrat-mont">
+            <div className="text-[#FDF0D5] text-3xl font-bold savate-svt">
               ExcelFlow
             </div>
           </div>

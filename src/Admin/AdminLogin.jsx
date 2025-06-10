@@ -24,9 +24,12 @@ const AdminLogin = () => {
       const response = await axios.post("http://localhost:80/api/admin/admin-login", formData);
       setSuccess(response.data.message);
 
+      // localStorage.setItem("token", response.data.token);
+      // localStorage.setItem("role", response.data.role);
+      // localStorage.setItem("user", JSON.stringify(response.data.user));
+
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("user", JSON.stringify(response.data.admin));
 
       navigate("/admin-dashboard");
     } catch (err) {

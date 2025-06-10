@@ -28,6 +28,13 @@
   font-style: normal;
 }
 
+.savate-svt {
+  font-family: "Savate", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
 @keyframes shine {
   0% {
     left: -50%;

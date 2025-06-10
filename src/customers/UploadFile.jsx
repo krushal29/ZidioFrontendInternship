@@ -17,6 +17,9 @@ import {
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Papa from 'papaparse';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 ChartJS.register(
   CategoryScale,
@@ -35,6 +38,8 @@ const UploadFile = () => {
   const [excelData, setExcelData] = useState([]);
   const [chartType, setChartType] = useState("bar");
   const [selectedColumns, setSelectedColumns] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles[0]);
@@ -51,40 +56,83 @@ const UploadFile = () => {
     multiple: false,
   });
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!file) return setMessage("Please select a file to upload.");
+
+  //   const formData = new FormData();
+  //   formData.append("File", file);
+
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     const res = await axios.post("http://localhost:80/api/excel/uploadExcelFile", formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     if (res.data.success) {
+  //       setMessage("✅ File uploaded successfully.");
+  //       setFile(null);
+
+  //       const allData = await axios.get("http://localhost:80/api/excel/ExcelAllData", {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+
+  //       const latest = allData.data.message.at(-1);
+  //       const firstSheet = Object.keys(latest.ExcelData)[0];
+  //       setExcelData(latest.ExcelData[firstSheet]);
+  //     } else {
+  //       setMessage("❌ Failed to upload file.");
+  //     }
+  //   } catch (err) {
+  //     console.error("Upload failed:", err.response?.data || err.message);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) return setMessage("Please select a file to upload.");
+  e.preventDefault();
+  if (!file) return setMessage("Please select a file to upload.");
 
-    const formData = new FormData();
-    formData.append("File", file);
+  const formData = new FormData();
+  formData.append("File", file);
+  setLoading(true); // Start loading
 
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:80/api/excel/uploadExcelFile", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.post("http://localhost:80/api/excel/uploadExcelFile", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.data.success) {
+      toast.success("File uploaded successfully!");
+      // setMessage("✅ File uploaded successfully.");
+      setFile(null);
+
+      const allData = await axios.get("http://localhost:80/api/excel/ExcelAllData", {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (res.data.success) {
-        setMessage("✅ File uploaded successfully.");
-        setFile(null);
-
-        const allData = await axios.get("http://localhost:80/api/excel/ExcelAllData", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const latest = allData.data.message.at(-1);
-        const firstSheet = Object.keys(latest.ExcelData)[0];
-        setExcelData(latest.ExcelData[firstSheet]);
-      } else {
-        setMessage("❌ Failed to upload file.");
-      }
-    } catch (err) {
-      console.error("Upload failed:", err.response?.data || err.message);
+      const latest = allData.data.message.at(-1);
+      const firstSheet = Object.keys(latest.ExcelData)[0];
+      setExcelData(latest.ExcelData[firstSheet]);
+    } else {
+      // setMessage("❌ Failed to upload file.");
+      toast.error("Failed to upload file.");
     }
-  };
+  } catch (err) {
+    console.error("Upload failed:", err.response?.data || err.message);
+    // setMessage("❌ Upload failed. Please try again.");
+     toast.error("Failed to upload file.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const numericKeys = Object.keys(excelData[0] || {}).filter(
     key => typeof excelData[0][key] === "number"
@@ -146,13 +194,15 @@ const UploadFile = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-28 p-8  shadow-lg rounded-lg relative">
+    // <div className="max-w-4xl mx-auto mt-28 p-8  shadow-lg rounded-lg relative">
+    <div className="ml-72 p-6 shadow-xl mt-2.5 rounded-lg">
       {/* <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div> */}
 
       <Sidebar />
+      <ToastContainer position="top-right" toastStyle={{ backgroundColor: "black", color: "white" }} autoClose={3000} hideProgressBar={false} />
         <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div>
 
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">📤 Upload Excel File</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center montserrat-mont1">📤 Upload Excel File</h1>
 
       <div
         {...getRootProps()}
@@ -177,7 +227,7 @@ const UploadFile = () => {
           type="submit"
           className="bg-[#1b79a5] hover:bg-[#006494] text-white cursor-pointer px-6 py-3 rounded-lg shadow-md hover:scale-110 transform duration-300 ease-in-out font-bold"
         >
-          Upload File
+          {loading ? <p className="text-center text-white flex justify-center items-center font-medium">📡 Uploading file, please wait...</p> : "Upload File"}
         </button>
       </form>
 

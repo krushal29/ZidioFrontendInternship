@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { FaSpinner } from 'react-icons/fa';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
 
   const handleChange = (e) => {
@@ -24,7 +27,7 @@ const Signup = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
-
+setLoading(true);   
     try {
       const response = await axios.post("http://localhost:80/api/user/signup", formData, {
         headers: { "Content-Type": "application/json" },
@@ -40,7 +43,9 @@ const Signup = () => {
       navigate("/customer-dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed!");
-    }
+    }finally {
+  setLoading(false);
+}
   };
 
   return (
@@ -93,13 +98,24 @@ const Signup = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
-           
-          >
-            Register as Customer
-          </button>
+          {loading ? (
+  <button
+    type="button"
+    disabled
+    className="flex justify-center items-center gap-2 bg-gray-400 text-white font-semibold text-lg py-3 border rounded-lg cursor-not-allowed"
+  >
+    <FaSpinner className="animate-spin" />
+    Creating your account...
+  </button>
+) : (
+  <button
+    type="submit"
+    className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
+  >
+    Register as Customer
+  </button>
+)}
+
 
           <p className="text-center text-sm text-gray-500">
             Already have an account?{" "}
