@@ -41,6 +41,7 @@ setLoading(true);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      // console.log(response.data.token)
 
       setSuccess(response.data.message);
       setFormData({ Email: "", Password: "" });
