@@ -114,7 +114,8 @@ const Login = () => {
         {!showForgotPassword ? (
           <form className="flex flex-col gap-4 text-gray-600" onSubmit={handleSubmit}>
             <div className="relative">
-              <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FontAwesomeIcon icon={faEnvelope} className={`absolute left-3  transform -translate-y-1/2  text-gray-400
+      ${errors.Email ? 'top-1/3' : 'top-1/2'}`} />
               <input
                 type="email"
                 name="Email"
@@ -128,7 +129,8 @@ const Login = () => {
             </div>
 
             <div className="relative">
-              <FontAwesomeIcon icon={faLock} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FontAwesomeIcon icon={faLock} className={`absolute left-3  transform -translate-y-1/2  text-gray-400
+      ${errors.Password ? 'top-1/4' : 'top-1/2'}`} />
               <input
                 type="password"
                 name="Password"

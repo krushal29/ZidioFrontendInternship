@@ -89,7 +89,8 @@ const Signup = () => {
 
         <form className="flex flex-col gap-4 text-gray-600" onSubmit={handleSubmit}>
           <div className="relative">
-            <FontAwesomeIcon icon={faUser} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FontAwesomeIcon icon={faUser} className={`absolute left-3  transform -translate-y-1/2  text-gray-400
+      ${errors.UserName ? 'top-1/3' : 'top-1/2'}`} />
             <input
               type="text"
               name="UserName"
@@ -103,7 +104,8 @@ const Signup = () => {
           </div>
 
           <div className="relative">
-            <FontAwesomeIcon icon={faEnvelope} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FontAwesomeIcon icon={faEnvelope} className={`absolute left-3  transform -translate-y-1/2  text-gray-400
+      ${errors.UserEmail ? 'top-1/3' : 'top-1/2'}`} />
             <input
               type="email"
               name="UserEmail"
@@ -117,7 +119,8 @@ const Signup = () => {
           </div>
 
           <div className="relative">
-            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-[50%] transform -translate-y-1/2 text-gray-400" />
+            <FontAwesomeIcon icon={faLock} className={`absolute left-3  transform -translate-y-1/2  text-gray-400
+      ${errors.Password ? 'top-1/4' : 'top-1/2'}`} />
             <input
               type="password"
               name="Password"
