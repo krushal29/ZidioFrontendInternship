@@ -12,6 +12,14 @@ const Signup = () => {
     UserEmail: "",
     Password: "",
   });
+
+   const [errors, setErrors] = useState({
+    UserName: "",
+    UserEmail: "",
+    Password: "",
+  });
+
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -20,14 +28,35 @@ const Signup = () => {
 
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]:value });
+
+    let fieldError = "";
+
+    if (name === "UserName") {
+      fieldError = value.trim().length > 1 ? "" : "Full name must be at least 2 characters.";
+    } else if (name === "UserEmail") {
+      const emailRegex = /^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      fieldError = emailRegex.test(value) ? "" : "Please enter a valid email address.";
+    } else if (name === "Password") {
+      const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+      fieldError = passwordRegex.test(value)
+        ? ""
+        : "Password must be at least 6 characters, include uppercase, lowercase, and a number.";
+    }
+
+    setErrors({ ...errors, [name]: fieldError });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-setLoading(true);   
+    if (Object.values(errors).some((err) => err !== "")) {
+      setError("Please fix the errors before submitting.");
+      return;
+    }
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost:80/api/user/signup", formData, {
         headers: { "Content-Type": "application/json" },
@@ -43,9 +72,9 @@ setLoading(true);
       navigate("/customer-dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed!");
-    }finally {
-  setLoading(false);
-}
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,6 +99,7 @@ setLoading(true);
               className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
               required
             />
+            {errors.UserName && <p className="text-sm text-red-500 mt-1">{errors.UserName}</p>}
           </div>
 
           <div className="relative">
@@ -83,10 +113,11 @@ setLoading(true);
               className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
               required
             />
+            {errors.UserEmail && <p className="text-sm text-red-500 mt-1">{errors.UserEmail}</p>}
           </div>
 
           <div className="relative">
-            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FontAwesomeIcon icon={faLock} className="absolute left-3 top-[50%] transform -translate-y-1/2 text-gray-400" />
             <input
               type="password"
               name="Password"
@@ -96,25 +127,26 @@ setLoading(true);
               className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
               required
             />
+            {errors.Password && <p className="text-sm text-red-500 mt-1">{errors.Password}</p>}
           </div>
 
           {loading ? (
-  <button
-    type="button"
-    disabled
-    className="flex justify-center items-center gap-2 bg-gray-400 text-white font-semibold text-lg py-3 border rounded-lg cursor-not-allowed"
-  >
-    <FaSpinner className="animate-spin" />
-    Creating your account...
-  </button>
-) : (
-  <button
-    type="submit"
-    className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
-  >
-    Register as Customer
-  </button>
-)}
+            <button
+              type="button"
+              disabled
+              className="flex justify-center items-center gap-2 bg-gray-400 text-white font-semibold text-lg py-3 border rounded-lg cursor-not-allowed"
+            >
+              <FaSpinner className="animate-spin" />
+              Creating your account...
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
+            >
+              Register as Customer
+            </button>
+          )}
 
 
           <p className="text-center text-sm text-gray-500">
@@ -129,31 +161,31 @@ setLoading(true);
           </p>
         </form>
         <div className="mt-6 text-center">
-                  <p className="text-gray-600 mb-4">Or continue with</p>
-                  <div className="flex justify-center gap-4">
-                    <a href="http://localhost:80/api/user/google">
-                    <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
-                      <FontAwesomeIcon icon={faGoogle} className="text-red-500" />
-                      Google
-                    </button>
-                    </a>
-                    <a href="http://localhost:80/api/user/github">
-                    <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
-                      <FontAwesomeIcon icon={faGithub} className="text-black" />
-                      GitHub
-                    </button>
-                    </a>
-                  </div>
-                </div>
-
-                <div className="mt-6 text-center">
-            <button
-              onClick={() => navigate("/admin-signup")}
-              className="text-sm text-[#006494] font-semibold hover:underline"
-            >
-              Signup as Admin →
-            </button>
+          <p className="text-gray-600 mb-4">Or continue with</p>
+          <div className="flex justify-center gap-4">
+            <a href="http://localhost:80/api/user/google">
+              <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
+                <FontAwesomeIcon icon={faGoogle} className="" />
+                Google
+              </button>
+            </a>
+            <a href="http://localhost:80/api/user/github">
+              <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
+                <FontAwesomeIcon icon={faGithub} className="text-black" />
+                GitHub
+              </button>
+            </a>
           </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => navigate("/admin-signup")}
+            className="text-sm text-[#006494] font-semibold hover:underline"
+          >
+            Signup as Admin →
+          </button>
+        </div>
 
         <div className="mt-6 text-center">
           <button
@@ -164,7 +196,7 @@ setLoading(true);
           </button>
         </div>
       </div>
-      
+
     </section>
   );
 };

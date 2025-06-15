@@ -644,7 +644,7 @@ const downloadChart = (format = "png") => {
       <Sidebar />
 
       {loading && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-30 flex justify-center items-center">
+        <div className="fixed inset-0 z-50  bg-opacity-30 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <div className="loader mb-4 w-12 h-12 border-t-4 border-blue-500 animate-spin mx-auto rounded-full"></div>
             <p>{loadingMessage || "Loading..."}</p>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
@@ -12,7 +12,14 @@ const Login = () => {
     Password: "",
   });
 
-   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    Email: "",
+    Password: "",
+  });
+
+
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -25,14 +32,33 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    let fieldError = "";
+
+    if (name === "Email") {
+      const emailRegex = /^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      fieldError = emailRegex.test(value) ? "" : "Please enter a valid email address.";
+    } else if (name === "Password") {
+      const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+      fieldError = passwordRegex.test(value)
+        ? ""
+        : "Password must be at least 6 characters, include uppercase, lowercase, and a number.";
+    }
+
+    setErrors({ ...errors, [name]: fieldError });
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-setLoading(true); 
+     if (Object.values(errors).some((err) => err !== "")) {
+      setError("Please fix the errors before submitting.");
+      return;
+    }
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost/api/user/login", formData, {
         headers: { "Content-Type": "application/json" },
@@ -51,13 +77,14 @@ setLoading(true);
       setError(err.response?.data?.message || "Login failed!");
     }
     finally {
-  setLoading(false);
+      setLoading(false);
     }
   };
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     setForgotMessage("");
+    setLoading(true);
 
     try {
       const res = await axios.post("http://localhost/api/user/forgotPassword", forgotData, {
@@ -68,6 +95,9 @@ setLoading(true);
       setForgotData({ email: "", password: "", confirmPassword: "" });
     } catch (err) {
       setForgotMessage(err.response?.data?.message || "Reset failed.");
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -94,6 +124,7 @@ setLoading(true);
                 className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
                 required
               />
+              {errors.Email && <p className="text-sm text-red-500 mt-1">{errors.Email}</p>}
             </div>
 
             <div className="relative">
@@ -107,6 +138,7 @@ setLoading(true);
                 className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
                 required
               />
+              {errors.Password && <p className="text-sm text-red-500 mt-1">{errors.Password}</p>}
             </div>
 
             {loading ? (
@@ -153,9 +185,8 @@ setLoading(true);
           >
             {forgotMessage && (
               <p
-                className={`text-center text-sm ${
-                  forgotMessage.toLowerCase().includes("success") ? "text-green-500" : "text-red-500"
-                }`}
+                className={`text-center text-sm ${forgotMessage.toLowerCase().includes("success") ? "text-green-500" : "text-red-500"
+                  }`}
               >
                 {forgotMessage}
               </p>
@@ -193,12 +224,23 @@ setLoading(true);
               className="w-full px-3 py-2 border rounded-lg"
             />
 
-            <button
-              type="submit"
-              className="text-white bg-[#006494] rounded-lg py-2 hover:bg-[#005377] transition"
-            >
-              Reset Password
-            </button>
+            {loading ? (
+              <button
+                type="button"
+                disabled
+                className="flex justify-center items-center gap-2 bg-gray-400 text-white font-semibold text-lg py-3 border rounded-lg cursor-not-allowed"
+              >
+                <FaSpinner className="animate-spin" />
+                Resetting Password...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="text-white font-semibold text-lg py-3 border cursor-pointer rounded-lg bg-[#006494] hover:scale-105 transition duration-300"
+              >
+                Reset Password
+              </button>
+            )}
 
             <button
               type="button"
@@ -216,7 +258,7 @@ setLoading(true);
             <div className="flex justify-center gap-4">
               <a href="http://localhost:80/api/user/google">
                 <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
-                  <FontAwesomeIcon icon={faGoogle} className="text-red-500" />
+                  <FontAwesomeIcon icon={faGoogle} className=" " />
                   Google
                 </button>
               </a>

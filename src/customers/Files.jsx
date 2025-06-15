@@ -137,7 +137,7 @@ const Files = () => {
         isOpen={aiModalOpen}
         onRequestClose={() => setAiModalOpen(false)}
         className="max-w-2xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-xl border outline-none"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        overlayClassName="fixed inset-0 backdrop-blur-[1px] bg-opacity-50 flex items-center justify-center"
       >
         <h2 className="text-xl font-semibold mb-4 text-[#167baa] montserrat-mont1">🤖 AI Overview</h2>
         <div className="max-h-96 overflow-y-auto text-gray-700 poppins-medium whitespace-pre-wrap text-base">
