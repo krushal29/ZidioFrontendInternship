@@ -397,6 +397,10 @@ const UploadFile = () => {
     key => typeof excelData[0][key] === "number"
   );
 
+  const XAxis = Object.keys(excelData[0] || {}).filter(
+    key => typeof excelData[0][key] === "string"
+  );
+
   const getChartData = () => {
     if (!excelData || !xAxis || !yAxis) return null;
     const xValues = excelData.map(row => row[xAxis]);
@@ -432,34 +436,49 @@ const UploadFile = () => {
     const data = getChartData();
     if (!data) return <p className="text-center text-red-600 mt-4">No numeric data to display.</p>;
 
-    if (is3D && (chartType === "bar" || chartType === "scatter")) {
-      const x = excelData.map(row => row[xAxis]);
-      const y = excelData.map(row => row[yAxis]);
-      const z = excelData.map((_, i) => i);
+    if (is3D && ["bar", "scatter", "line"].includes(chartType)) {
+  const x = excelData.map(row => row[xAxis]);
+  const y = excelData.map(row => row[yAxis]);
+  const z = excelData.map((_, i) => i);
 
-      const trace = {
-        type: "scatter3d",
-        mode: "markers",
-        x, y, z,
-        marker: { size: 5, color: y, colorscale: "Viridis" },
-      };
+  let trace;
 
-      return (
-        <Plot
-          data={[trace]}
-          layout={{
-            width: 700,
-            height: 500,
-            title: `${chartType.toUpperCase()} Chart (3D)`,
-            scene: {
-              xaxis: { title: xAxis },
-              yaxis: { title: yAxis },
-              zaxis: { title: "Index" },
-            },
-          }}
-        />
-      );
-    }
+  if (chartType === "line") {
+    trace = {
+      type: "scatter3d",
+      mode: "lines+markers",
+      x,
+      y,
+      z,
+      line: { color: 'blue', width: 2 },
+      marker: { size: 4 },
+    };
+  } else {
+    trace = {
+      type: "scatter3d",
+      mode: "markers",
+      x, y, z,
+      marker: { size: 5, color: y, colorscale: "Viridis" },
+    };
+  }
+
+  return (
+    <Plot
+      data={[trace]}
+      layout={{
+        width: 700,
+        height: 500,
+        title: `${chartType.toUpperCase()} Chart (3D)`,
+        scene: {
+          xaxis: { title: xAxis },
+          yaxis: { title: yAxis },
+          zaxis: { title: "Index" },
+        },
+      }}
+    />
+  );
+}
+
 
     const options = {
       responsive: true,
@@ -556,14 +575,14 @@ const UploadFile = () => {
             <label className="block font-semibold mb-2">Chart Dimension:</label>
             <select className="block w-full p-2 border rounded" value={is3D ? "3d" : "2d"} onChange={(e) => setIs3D(e.target.value === "3d")}>
               <option value="2d">2D</option>
-              <option value="3d">3D</option>
+                {["scatter", "bar","line"].includes(chartType) && <option value="3d">3D</option>}
             </select>
           </div>
 
           <div className="mb-4">
             <label className="block font-semibold mb-2">X Axis:</label>
             <select className="block w-full p-2 border rounded" value={xAxis} onChange={(e) => setXAxis(e.target.value)}>
-              {numericKeys.map((key) => <option key={key} value={key}>{key}</option>)}
+              {XAxis.map((key) => <option key={key} value={key}>{key}</option>)}
             </select>
           </div>
 
