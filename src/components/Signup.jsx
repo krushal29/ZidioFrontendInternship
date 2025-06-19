@@ -183,10 +183,10 @@ const Signup = () => {
 
         <div className="mt-6 text-center">
           <button
-            onClick={() => navigate("/admin-signup")}
+            onClick={() => navigate("/admin-login")}
             className="text-sm text-[#006494] font-semibold hover:underline"
           >
-            Signup as Admin →
+            Login as Admin →
           </button>
         </div>
 

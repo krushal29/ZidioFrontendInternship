@@ -92,7 +92,13 @@ const CustomerDashboard = () => {
 
         // Fetch user info
         const userRes = await axios.get('http://localhost:80/api/user/profile', { headers });
-        setUser(userRes.data.user);
+         const storedLastLogin = localStorage.getItem('lastLogin');
+          const userWithLastLogin = {
+        ...userRes.data.user,
+        lastLogin: storedLastLogin || userRes.data.user.lastLogin,
+      };
+      setUser(userWithLastLogin);
+        // setUser(userRes.data.user);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       }
@@ -187,6 +193,7 @@ const CustomerDashboard = () => {
 
         {/* User Info */}
         <div className="bg-[#c8e6f4] p-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300">
+         
           <h2 className="text-xl font-semibold mb-4 montserrat-mont1">👤 Your Info</h2>
           {user ? (
             <>
@@ -198,10 +205,21 @@ const CustomerDashboard = () => {
               >
                 Change Password
               </button>
+            
+              {user?.lastLogin && (
+  <div className=" text-sm flex gap-2 mt-2 text-gray-700 poppins-medium">
+    <p className="mb-1 text-red-600 "><strong>Last Login: </strong></p>
+    <p>{new Date(user.lastLogin).toLocaleDateString()}</p>
+<p>{new Date(user.lastLogin).toLocaleTimeString()}</p>
+
+  </div>
+)}
             </>
           ) : (
             <p>Loading user data...</p>
           )}
+
+
           {showPasswordModal && <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />}
         </div>
       </div>

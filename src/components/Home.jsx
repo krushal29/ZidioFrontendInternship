@@ -1,9 +1,12 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { TypeAnimation } from 'react-type-animation';
 import {
   UploadCloud,
   BarChart3,
   FileSpreadsheet,
   LockKeyhole,
+  Brain,
+  Sparkles 
 } from "lucide-react";
 import "../App.css";
 // import LandingImage from "../../public/excel.jpg";
@@ -40,6 +43,17 @@ const features = [
     description:
       "Your data is protected with JWT-based authentication and role control.",
   },
+  {
+  icon: <Brain className="w-10 h-10 text-[#8ECAE6]" />,
+  title: "AI Overview",
+  description:
+    "Leverage AI to auto-analyze your data and generate smart summaries and recommendations.",
+},
+{
+  icon: <Sparkles className="w-10 h-10 text-[#FFB703]" />, // use Lucide icon or custom
+  title: "Smart Insights",
+  description: "Get AI-powered highlights and anomalies from your data to drive better decisions.",
+},
 ];
 
 const Home = () => {
@@ -87,12 +101,26 @@ const Home = () => {
           }}
         >
           <div className="flex flex-col gap-6 text-right w-[55%] relative z-10 justify-center items-end">
-            <h1
+            {/* <h1
               className="font-extrabold text-7xl text-[#FDF0D5] montserrat-mont tracking-tight"
               style={{ textShadow: "3px 3px 8px rgba(0, 0, 0, 0.8)" }}
             >
               ExcelFlow
-            </h1>
+            </h1> */}
+
+            <TypeAnimation
+  sequence={[
+    'ExcelFlow', 
+    1000,       
+    '',          
+    500,         
+  ]}
+  wrapper="span"
+  speed={70}
+  repeat={Infinity}
+  className="text-[#FDF0D5] text-7xl font-bold montserrat-mont"
+/>
+
             <p
               className="font-semibold text-3xl text-[#669BBC] poppins-medium leading-tight"
               style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
@@ -108,8 +136,11 @@ const Home = () => {
             </Link>
           </div>
         </div>
+
+
         {/* Features Section */}
-        <section className="py-20 min-h-screen poppins-medium px-6 bg-[#FDF0D5]">
+
+        {/* <section className="py-20 min-h-screen poppins-medium px-6 bg-[#FDF0D5]">
           <h2 className="text-4xl font-bold text-center mb-16 text-[#003049]">
             Features
           </h2>
@@ -125,7 +156,28 @@ const Home = () => {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
+
+        <section className="py-20 min-h-screen poppins-medium px-6 bg-[#FDF0D5]">
+  <h2 className="text-4xl font-bold text-center mb-16 text-[#003049]">
+    Features
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    {features.map((feature, idx) => (
+      <div
+        key={idx}
+        className="bg-[#003049] rounded-xl shadow-xl p-8 text-center hover:translate-y-[-5px] transition-all duration-300 text-[#FDF0D5]"
+      >
+        <div className="mb-6 flex justify-center">{feature.icon}</div>
+        <h3 className="font-bold text-2xl mb-4">{feature.title}</h3>
+        <p className="text-[#FDF0D5]/90">{feature.description}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+
         {/* Footer */}
         <footer className="py-10 text-center bg-[#003049] text-[#FDF0D5] border-t-2 border-[#736F4E]">
           <p className="text-lg">

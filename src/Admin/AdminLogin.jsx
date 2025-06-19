@@ -79,16 +79,7 @@ const AdminLogin = () => {
             Login as Admin
           </button>
 
-          <p className="text-center text-sm text-gray-500">
-            Don't have an admin account?{" "}
-            <button
-              type="button"
-              className="text-[#006494] cursor-pointer hover:underline font-semibold"
-              onClick={() => navigate("/admin-signup")}
-            >
-              Signup
-            </button>
-          </p>
+        
         </form>
 
         <div className="mt-6 text-center">

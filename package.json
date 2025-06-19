@@ -36,6 +36,7 @@
     "react-router-dom": "^7.6.0",
     "react-scroll": "^1.9.3",
     "react-toastify": "^11.0.5",
+    "react-type-animation": "^3.2.0",
     "router": "^2.2.0",
     "three": "^0.177.0"
   },

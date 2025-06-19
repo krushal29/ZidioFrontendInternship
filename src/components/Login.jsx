@@ -67,6 +67,7 @@ const Login = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("role", response.data.role);
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("lastLogin", response.data.user.lastLogin)
       // console.log(response.data.token)
 
       setSuccess(response.data.message);
