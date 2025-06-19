@@ -19,9 +19,10 @@ const AdminDashboard = () => {
   };
 
   const [stats, setStats] = useState({
-  reviewedReports: 0,
+  totalFiles: 0,
   activeSessions: 0,
 });
+
 
 const fetchStats = async () => {
   try {
@@ -133,9 +134,9 @@ useEffect(() => {
           </div>
           <div className="bg-green-300 rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold text-gray-700 mb-2 poppins-medium">
-              Reports Reviewed
+              Total Files
             </h2>
-            <p className="text-3xl font-bold text-green-600 winky-sans"> {stats.reviewedReports}</p>
+            <p className="text-3xl font-bold text-green-600 winky-sans"> {stats.totalFiles}</p>
           </div>
           <div className="bg-purple-300 rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold text-gray-700 mb-2 poppins-medium">

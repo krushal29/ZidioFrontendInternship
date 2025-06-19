@@ -49,41 +49,35 @@ const Reports = () => {
           <div className="overflow-x-auto">
             <table className="min-w-full text-start border">
               <thead className="bg-teal-600 text-white">
-                <tr>
-                  <th className="py-2 px-4 poppins-medium">Title</th>
-                  <th className="py-2 px-4 poppins-medium">Description</th>
-                  <th className="py-2 px-4 poppins-medium">Status</th>
-                  <th className="py-2 px-4 poppins-medium">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reports.map((report) => (
-                  <tr key={report._id} className="border-b text-center">
-                    <td className="py-2 px-4 winky-sans text-lg">{report.title}</td>
-                    <td className="py-2 px-4 winky-sans text-lg">{report.description}</td>
-                    <td className="py-2 px-4 winky-sans text-lg">
-                      {report.isReviewed ? 'Reviewed' : 'Pending'}
-                    </td>
-                    <td className="py-2 px-4">
-                      {!report.isReviewed && (
-                        <button
-                          onClick={() => handleReview(report._id)}
-                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                        >
-                          Mark as Reviewed
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-                {reports.length === 0 && (
-                  <tr>
-                    <td colSpan="4" className="py-4 text-center text-gray-500">
-                      No reports found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
+  <tr>
+    <th className="py-2 px-4 poppins-medium">Title</th>
+    <th className="py-2 px-4 poppins-medium">Description</th>
+    <th className="py-2 px-4 poppins-medium">Uploaded At</th>
+    <th className="py-2 px-4 poppins-medium">File Size</th>
+  </tr>
+</thead>
+<tbody>
+  {reports.map((report) => (
+    <tr key={report._id} className="border-b text-center">
+      <td className="py-2 px-4 winky-sans text-lg">{report.title}</td>
+      <td className="py-2 px-4 winky-sans text-lg">{report.description}</td>
+      <td className="py-2 px-4 winky-sans text-lg">
+        {new Date(report.createdAt).toLocaleString()}
+      </td>
+       <td className="py-2 px-4 winky-sans text-lg">
+        {report.fileSize ? `${(report.fileSize / 1024).toFixed(2)} KB` : "N/A"}
+      </td>
+    </tr>
+  ))}
+  {reports.length === 0 && (
+    <tr>
+      <td colSpan="3" className="py-4 text-center text-gray-500">
+        No reports found.
+      </td>
+    </tr>
+  )}
+</tbody>
+
             </table>
           </div>
         </div>
