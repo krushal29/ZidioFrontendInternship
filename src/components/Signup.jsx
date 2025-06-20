@@ -96,7 +96,7 @@ const Signup = () => {
               name="UserName"
               value={formData.UserName}
               onChange={handleChange}
-              placeholder="Full Name"
+              placeholder="User Name"
               className="w-full pl-10 pr-4 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
               required
             />

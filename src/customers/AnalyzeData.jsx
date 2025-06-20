@@ -496,6 +496,7 @@
 
         if (res.data.chartData) {
           setChartData(res.data.chartData);
+          await countGraphUsage(chartType, "2d"); 
         }
       } catch (error) {
         console.error("Error generating chart", error);
@@ -585,6 +586,25 @@
 //   };
 
 
+const countGraphUsage = async (graphType, graphDimension) => {
+  try {
+    await axios.post(
+      "http://localhost:80/api/graph/CountGraph",
+      { graphType, graphDimension },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(`Graph usage logged: ${graphType} - ${graphDimension}`);
+  } catch (err) {
+    console.error("Failed to count graph usage", err.response?.data || err.message);
+  }
+};
+
+
+
 const generate3DChart = async () => {
   console.log("3D chart generation started");
 
@@ -622,6 +642,7 @@ const generate3DChart = async () => {
     if (res.data.success) {
       console.log("Received 3D Data:", res.data.processedData);
       setThreeDData(res.data.processedData);
+       await countGraphUsage(chartType, "3d"); 
     } else {
       console.warn("Backend responded with success=false");
       alert("Failed to fetch 3D chart data.");

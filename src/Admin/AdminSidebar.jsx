@@ -26,7 +26,7 @@ const AdminSidebar = () => {
           <button onClick={() => navigate("/users")} className="flex poppins-medium items-center rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-yellow-600">
             <FaUserShield size={20} /> Users
           </button>
-          <button className="flex poppins-medium items-center rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-yellow-600">
+          <button onClick={() => navigate("/analytics")} className="flex poppins-medium items-center rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-yellow-600">
             <FaChartBar size={20} /> Analytics
           </button>
           <button onClick={() => navigate("/reports")} className="flex items-center poppins-medium rounded-lg text-xl cursor-pointer px-4 py-2 gap-3 w-full text-left hover:bg-yellow-600">

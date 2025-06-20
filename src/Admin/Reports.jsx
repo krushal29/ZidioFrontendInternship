@@ -40,8 +40,7 @@ const Reports = () => {
   return (
     <div className="flex h-screen">
         <AdminSidebar/>
-      {/* <div className="w-1/5">
-      </div> */}
+     
       
       <div className="w-4/5 p-4 overflow-y-auto h-screen">
         <div className="bg-white rounded-lg shadow p-6 mt-4">

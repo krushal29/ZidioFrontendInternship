@@ -13,6 +13,7 @@ import AdminLogin from './Admin/AdminLogin';
 import AdminDashboard from './Admin/AdminDashboard'
 import Reports from './Admin/Reports';
 import AnalyzeData from './customers/AnalyzeData';
+import Analytics from './Admin/Analytics';
 
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/reports" element={<Reports />} />
           <Route path="/users" element={<AdminDashboard />} />
           <Route path="/analyze-data" element={<AnalyzeData />} />  
+          <Route path="/analytics" element={<Analytics />} />  
         </Routes>
         
     </div>
