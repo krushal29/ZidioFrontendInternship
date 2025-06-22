@@ -3,8 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
+
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,8 @@ const Signup = () => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
 
 
@@ -118,7 +121,7 @@ const Signup = () => {
             {errors.UserEmail && <p className="text-sm text-red-500 mt-1">{errors.UserEmail}</p>}
           </div>
 
-          <div className="relative">
+          {/* <div className="relative">
             <FontAwesomeIcon icon={faLock} className={`absolute left-3  transform -translate-y-1/2  text-gray-400
       ${errors.Password ? 'top-1/4' : 'top-1/2'}`} />
             <input
@@ -131,7 +134,35 @@ const Signup = () => {
               required
             />
             {errors.Password && <p className="text-sm text-red-500 mt-1">{errors.Password}</p>}
-          </div>
+          </div> */}
+
+          <div className="relative">
+  <FontAwesomeIcon
+    icon={faLock}
+    className={`absolute left-3 transform -translate-y-1/2 text-gray-400 ${
+      errors.Password ? "top-1/4" : "top-1/2"
+    }`}
+  />
+  <input
+    type={showPassword ? "text" : "password"}
+    name="Password"
+    value={formData.Password}
+    onChange={handleChange}
+    placeholder="Password"
+    className="w-full pl-10 pr-10 py-3 border rounded-lg focus:outline-none focus:border-[#064848]"
+    required
+  />
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 flex items-center  top-4 transform  cursor-pointer text-gray-500"
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+  {errors.Password && (
+    <p className="text-sm text-red-500 mt-1">{errors.Password}</p>
+  )}
+</div>
+
 
           {loading ? (
             <button

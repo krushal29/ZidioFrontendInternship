@@ -730,27 +730,63 @@ const chartRef = useRef(null);
     }
   };
 
-  const download3DChart = (format = "png") => {
-  if (!threeDRef.current || !threeDRef.current.getCanvas) {
+//   const download3DChart = (format = "png") => {
+//   if (!threeDRef.current || !threeDRef.current.getCanvas) {
+//     alert("3D chart is not ready.");
+//     return;
+//   }
+
+//   const canvas = threeDRef.current.getCanvas();
+//   const imgData = canvas.toDataURL("image/png");
+
+//   if (format === "pdf") {
+//     const pdf = new jsPDF("landscape", "px", [canvas.width, canvas.height]);
+//     pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+//     pdf.save("3d_chart.pdf");
+//     return;
+//   }
+
+//   const link = document.createElement("a");
+//   link.href = imgData;
+//   link.download = `3d_chart.${format}`;
+//   link.click();
+// };
+
+const download3DChart = (format = "png") => {
+  if (!threeDRef.current || typeof threeDRef.current.getCanvas !== "function") {
     alert("3D chart is not ready.");
     return;
   }
 
   const canvas = threeDRef.current.getCanvas();
-  const imgData = canvas.toDataURL("image/png");
-
-  if (format === "pdf") {
-    const pdf = new jsPDF("landscape", "px", [canvas.width, canvas.height]);
-    pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
-    pdf.save("3d_chart.pdf");
+  if (!canvas) {
+    alert("Canvas not found.");
     return;
   }
 
-  const link = document.createElement("a");
-  link.href = imgData;
-  link.download = `3d_chart.${format}`;
-  link.click();
+  // Wait until the next paint
+  requestAnimationFrame(() => {
+    try {
+      const imgData = canvas.toDataURL("image/png");
+
+      if (format === "pdf") {
+        const pdf = new jsPDF("landscape", "px", [canvas.width, canvas.height]);
+        pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+        pdf.save("3d_chart.pdf");
+      } else {
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = `3d_chart.${format}`;
+        link.click();
+      }
+    } catch (err) {
+      console.error("Error capturing chart image:", err);
+      alert("Failed to capture 3D chart. Try again.");
+    }
+  });
 };
+
+
 
 
   const numericKeys = Object.keys(excelData[0] || {}).filter(

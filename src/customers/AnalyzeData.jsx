@@ -624,7 +624,7 @@ const generate3DChart = async () => {
   } else {
     payload.useSyntheticZ = true;
   }
-
+console.log("X axis:", selectedXAxis, "Y axis:", selectedYAxis, "Z axis:", selectedZAxis);
   console.log("Sending payload to backend:", payload);
 
   try {
@@ -942,7 +942,7 @@ const generate3DChart = async () => {
 
           </div>
         )}
-      </div>
+      </div >
     );
   };
 

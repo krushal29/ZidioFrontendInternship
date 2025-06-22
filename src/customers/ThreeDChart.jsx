@@ -541,151 +541,693 @@
 
 
 
-import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+// import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from "react";
+// import * as THREE from "three";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+// import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+// import helvetikerFont from 'three/examples/fonts/helvetiker_regular.typeface.json';
+
+// const ThreeDChart = forwardRef(({ chartData, chartType = "scatter", xAxis = "x", yAxis = "y", zAxis = "z" }, ref) => {
+//   const mountRef = useRef(null);
+//   const rendererRef = useRef(null);
+//   const [font, setFont] = useState(null);
+
+//   useImperativeHandle(ref, () => ({
+//     getCanvas: () => rendererRef.current?.domElement || null,
+//   }));
+
+//   useEffect(() => {
+//     const loader = new FontLoader();
+//     setFont(loader.parse(helvetikerFont));
+//   }, []);
+
+//   useEffect(() => {
+//     if (!chartData || !chartData.length || !font) return;
+
+//     const container = mountRef.current;
+//     const width = container.clientWidth;
+//     const height = container.clientHeight;
+
+//     while (container.firstChild) container.removeChild(container.firstChild);
+
+//     const scene = new THREE.Scene();
+//     scene.background = new THREE.Color(0xf0f0f0);
+
+//     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+//     const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+//     renderer.setSize(width, height);
+//     rendererRef.current = renderer;
+//     container.appendChild(renderer.domElement);
+
+//     const controls = new OrbitControls(camera, renderer.domElement);
+//     controls.enableDamping = true;
+
+//     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+//     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+//     dirLight.position.set(20, 30, 10);
+//     scene.add(dirLight);
+
+//     let minX = Infinity, maxX = -Infinity;
+//     let minY = Infinity, maxY = -Infinity;
+//     let minZ = Infinity, maxZ = -Infinity;
+
+//     chartData.forEach((item) => {
+//       const x = parseFloat(item[xAxis]);
+//       const y = parseFloat(item[yAxis]);
+//       const z = parseFloat(item[zAxis]) || 0;
+//       if (isNaN(x) || isNaN(y) || isNaN(z)) return;
+//       minX = Math.min(minX, x);
+//       maxX = Math.max(maxX, x);
+//       minY = Math.min(minY, y);
+//       maxY = Math.max(maxY, y);
+//       minZ = Math.min(minZ, z);
+//       maxZ = Math.max(maxZ, z);
+//     });
+
+//     const axisLength = Math.max(maxX - minX, maxY - minY, maxZ - minZ) + 5;
+//     const tickSpacing = Math.ceil(axisLength / 6);
+
+//     const axes = {
+//       x: { dir: new THREE.Vector3(1, 0, 0), color: 0xff4444, label: "X" },
+//       y: { dir: new THREE.Vector3(0, 1, 0), color: 0x44ff44, label: "Y" },
+//       z: { dir: new THREE.Vector3(0, 0, 1), color: 0x4444ff, label: "Z" },
+//     };
+
+//     Object.entries(axes).forEach(([axis, { dir, color, label }]) => {
+//       const arrow = new THREE.ArrowHelper(dir, new THREE.Vector3(0, 0, 0), axisLength, color);
+//       scene.add(arrow);
+//       addTextLabel(label, ...dir.clone().multiplyScalar(axisLength + 1).toArray(), color);
+//     });
+
+//     for (let i = tickSpacing; i <= axisLength; i += tickSpacing) {
+//       createTick([i, 0, 0], [i, 0.5, 0]);
+//       addTextLabel(`${i}`, i, -1, 0);
+//       createTick([0, i, 0], [0.5, i, 0]);
+//       addTextLabel(`${i}`, -1.2, i, 0);
+//       createTick([0, 0, i], [0.5, 0, i]);
+//       addTextLabel(`${i}`, -1.2, 0, i);
+//     }
+
+//     function createTick(from, to) {
+//       const geom = new THREE.BufferGeometry().setFromPoints([
+//         new THREE.Vector3(...from),
+//         new THREE.Vector3(...to),
+//       ]);
+//       const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x999999 }));
+//       scene.add(line);
+//     }
+
+//     function addTextLabel(text, x, y, z, color = 0x000000) {
+//       const geometry = new TextGeometry(text, {
+//         font,
+//         size: 0.5,
+//         height: 0.05,
+//       });
+//       const material = new THREE.MeshBasicMaterial({ color });
+//       const mesh = new THREE.Mesh(geometry, material);
+//       mesh.position.set(x, y, z);
+//       scene.add(mesh);
+//     }
+
+//     const palette = [
+//       0xff6f61, 0x6a5acd, 0x40e0d0, 0xffc107,
+//       0x8bc34a, 0xe91e63, 0x3f51b5, 0x009688
+//     ];
+
+//     chartData.forEach((item, i) => {
+//       let x = parseFloat(item[xAxis]) - minX;
+//       let y = parseFloat(item[yAxis]) - minY;
+//       let z = parseFloat(item[zAxis]) - minZ || 0;
+//       if (isNaN(x) || isNaN(y) || isNaN(z)) return;
+
+//       const color = palette[i % palette.length];
+//       const material = new THREE.MeshStandardMaterial({ color });
+//       let mesh;
+
+//       if (chartType === "bar") {
+//         const height = y;
+//         mesh = new THREE.Mesh(new THREE.BoxGeometry(1, height, 1), material);
+//         mesh.position.set(x, height / 2, z);
+//       } else {
+//         mesh = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), material);
+//         mesh.position.set(x, y, z);
+//       }
+
+//       scene.add(mesh);
+//     });
+
+    
+
+
+//     camera.position.set(axisLength, axisLength, axisLength);
+//     camera.lookAt(0, 0, 0);
+
+//     const animate = () => {
+//       renderer.render(scene, camera);
+//       controls.update();
+//       requestAnimationFrame(animate);
+//     };
+//     animate();
+
+//     return () => {
+//       controls.dispose();
+//       renderer.dispose();
+//       if (renderer.domElement && container.contains(renderer.domElement)) {
+//         container.removeChild(renderer.domElement);
+//       }
+//     };
+//   }, [chartData, chartType, font, xAxis, yAxis, zAxis]);
+
+//   return <div ref={mountRef} style={{ width: "100%", height: "600px" }} />;
+// });
+
+// export default ThreeDChart; 
+
+
+
+
+// import React, { useRef, useEffect, useState } from "react";
+// import * as THREE from "three";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+// import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
+
+// const FONT_URL = "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json";
+
+// const ThreeDChart = ({
+//   chartData,
+//   chartType = "scatter",
+//   xAxis = "x",
+//   yAxis = "y",
+//   zAxis = "z",
+// }) => {
+//   const containerRef = useRef();
+//   const tooltipRef = useRef();
+
+//   const [font, setFont] = useState(null);
+
+//   // Load font async
+//   useEffect(() => {
+//     const loader = new FontLoader();
+//     loader.load(
+//       FONT_URL,
+//       (loadedFont) => setFont(loadedFont),
+//       undefined,
+//       (err) => console.error("Font load error:", err)
+//     );
+//   }, []);
+
+//   // Main render logic
+//   useEffect(() => {
+//     if (!chartData?.length) return; // charts need data
+
+//     const container = containerRef.current;
+//     const rect = container.getBoundingClientRect();
+//     const width = rect.width, height = rect.height;
+
+//     const scene = new THREE.Scene();
+//     scene.background = new THREE.Color(0xf0f0f0);
+
+//     const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+//     camera.position.set(10, 10, 10);
+//     camera.lookAt(0, 0, 0);
+
+//     const renderer = new THREE.WebGLRenderer({ antialias: true });
+//     renderer.setSize(width, height);
+//     container.innerHTML = "";
+//     container.appendChild(renderer.domElement);
+
+//     const controls = new OrbitControls(camera, renderer.domElement);
+//     controls.enableDamping = true;
+
+//     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+//     const dl = new THREE.DirectionalLight(0xffffff, 1);
+//     dl.position.set(20, 30, 20);
+//     scene.add(dl);
+
+//     scene.add(new THREE.GridHelper(20, 20));
+//     scene.add(new THREE.AxesHelper(5));
+
+//     const helper = new THREE.Mesh(
+//   new THREE.SphereGeometry(0.2),
+//   new THREE.MeshBasicMaterial({ color: 0xffff00 })
+// );
+// scene.add(helper);
+
+
+//     // Helper to render labels (only if font is loaded)
+//     const addLabel = (text, x, y, z, color = 0x000000) => {
+//   if (!font || typeof text !== 'string') return;
+
+//   const shapes = font.generateShapes(text, 0.3);
+//   const geometry = new THREE.ShapeGeometry(shapes);
+//   geometry.computeBoundingBox();
+//   const xMid = -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
+//   geometry.translate(xMid, 0, 0);
+
+//   const material = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+//   const textMesh = new THREE.Mesh(geometry, material);
+//   textMesh.position.set(x, y, z);
+//   scene.add(textMesh);
+// };
+
+
+//     // Map categories -> numeric
+//     const categories = [...new Set(chartData.map(d => d[xAxis]))];
+//     const mapped = chartData.map(d => ({
+//       x: categories.indexOf(d[xAxis]),
+//       y: parseFloat(d[yAxis]) || 0,
+//       z: parseFloat(d[zAxis]) || 0,
+//       rawX: d[xAxis],
+//     }));
+
+//     const palette = [0xff6f61, 0x6a5acd, 0x40e0d0, 0xffc107, 0x8bc34a, 0xe91e63];
+//     const objects = [];
+
+//     mapped.forEach((d, i) => {
+//       const mat = new THREE.MeshStandardMaterial({ color: palette[i % 6] });
+//       let mesh;
+//       if (chartType === "bar") {
+//         const h = d.y <= 0 ? 0.1 : d.y;
+//         const geo = new THREE.BoxGeometry(0.5, h, 0.5);
+//         mesh = new THREE.Mesh(geo, mat);
+//         mesh.position.set(d.x, h / 2, d.z);
+//       } else {
+//         const geo = new THREE.SphereGeometry(0.3, 16, 16);
+//         mesh = new THREE.Mesh(geo, mat);
+//         mesh.position.set(d.x, d.y, d.z);
+//       }
+//       mesh.userData = d;
+//       scene.add(mesh);
+//       objects.push(mesh);
+//     });
+
+//     // Label categories along X axis
+//     if (font) {
+//   categories.forEach((cat, i) => {
+//     addLabel(String(cat), i, -0.5, 0, 0xff4444);
+//   });
+// }
+
+
+//     // Tooltip logic
+//     const ray = new THREE.Raycaster();
+//     const mouse = new THREE.Vector2();
+//     const tooltip = tooltipRef.current;
+
+//     const onMove = (e) => {
+//       const bounds = container.getBoundingClientRect();
+//       mouse.x = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
+//       mouse.y = -((e.clientY - bounds.top) / bounds.height) * 2 + 1;
+//       ray.setFromCamera(mouse, camera);
+//       const hit = ray.intersectObjects(objects);
+//       if (hit.length) {
+//         const { rawX, y, z } = hit[0].object.userData;
+//         tooltip.style.display = "block";
+//         tooltip.style.left = e.clientX + "px";
+//         tooltip.style.top = e.clientY + "px";
+//         tooltip.innerHTML = `X: ${rawX}<br>Y: ${y}<br>Z: ${z}`;
+//       } else {
+//         tooltip.style.display = "none";
+//       }
+//     };
+//     container.addEventListener("mousemove", onMove);
+
+//     const animate = () => {
+//       controls.update();
+//       renderer.render(scene, camera);
+//       requestAnimationFrame(animate);
+//     };
+//     animate();
+
+//     // Cleanup on unmount or next updates
+//     return () => {
+//       controls.dispose();
+//       renderer.dispose();
+//       container.innerHTML = "";
+//       container.removeEventListener("mousemove", onMove);
+//     };
+//   }, [chartData, chartType, xAxis, yAxis, zAxis, font]);
+
+//   return (
+//     <div style={{ position: "relative" }}>
+//       <div ref={containerRef} style={{ width: "100%", height: 500 }} />
+//       <div
+//         ref={tooltipRef}
+//         style={{
+//           position: "absolute",
+//           display: "none",
+//           background: "#222",
+//           color: "#fff",
+//           padding: 5,
+//           borderRadius: 4,
+//           fontSize: 12,
+//           pointerEvents: "none",
+//           zIndex: 10,
+//         }}
+//       />
+//     </div>
+//   );
+// };
+
+// export default ThreeDChart;
+
+
+
+
+// import React, { useRef, useEffect, useState } from "react";
+// import * as THREE from "three";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
+// import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+
+// const FONT_URL = "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json";
+
+// const ThreeDChart = ({
+//   chartData,
+//   chartType = "scatter",
+//   xAxis = "x",
+//   yAxis = "y",
+//   zAxis = "z",
+// }, ref) => {
+//   const containerRef = useRef();
+//   const tooltipRef = useRef();
+//   const [font, setFont] = useState(null);
+
+//   // Load font
+//   useEffect(() => {
+//     const loader = new FontLoader();
+//     loader.load(
+//       FONT_URL,
+//       (loadedFont) => setFont(loadedFont),
+//       undefined,
+//       (err) => console.error("Font load error:", err)
+//     );
+//   }, []);
+
+//   // Render 3D chart
+//   useEffect(() => {
+//     if (!chartData?.length) return;
+
+//     const container = containerRef.current;
+//     const rect = container.getBoundingClientRect();
+//     const width = rect.width;
+//     const height = rect.height;
+
+//     const scene = new THREE.Scene();
+//     scene.background = new THREE.Color(0xf0f0f0);
+
+//     const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+//     camera.position.set(10, 10, 10);
+//     camera.lookAt(0, 0, 0);
+
+//     const renderer = new THREE.WebGLRenderer({ antialias: true });
+//     renderer.setSize(width, height);
+//     container.innerHTML = "";
+//     container.appendChild(renderer.domElement);
+
+//     const controls = new OrbitControls(camera, renderer.domElement);
+//     controls.enableDamping = true;
+
+//     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+//     const dl = new THREE.DirectionalLight(0xffffff, 1);
+//     dl.position.set(20, 30, 20);
+//     scene.add(dl);
+
+//     scene.add(new THREE.GridHelper(20, 20));
+//     scene.add(new THREE.AxesHelper(5));
+
+//     // Label helper
+//     const addLabel = (text, x, y, z, color = 0x000000) => {
+//       if (!font || typeof text !== "string") return;
+//       const shapes = font.generateShapes(text, 0.3);
+//       const geometry = new THREE.ShapeGeometry(shapes);
+//       geometry.computeBoundingBox();
+//       const xMid = -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
+//       geometry.translate(xMid, 0, 0);
+//       const material = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+//       const textMesh = new THREE.Mesh(geometry, material);
+//       textMesh.position.set(x, y, z);
+//       scene.add(textMesh);
+//     };
+
+//     // Normalize y and z values to fit in grid
+//     const categories = [...new Set(chartData.map((d) => d[xAxis]))];
+//     const maxY = Math.max(...chartData.map((d) => parseFloat(d[yAxis]) || 0));
+//     const maxZ = Math.max(...chartData.map((d) => parseFloat(d[zAxis]) || 0));
+//     const normalize = (val, max) => (max > 0 ? (val / max) * 5 : 0); // scale to 0–5 range
+
+//     const mapped = chartData.map((d) => {
+//       const rawY = parseFloat(d[yAxis]) || 0;
+//       const rawZ = parseFloat(d[zAxis]) || 0;
+//       return {
+//         x: categories.indexOf(d[xAxis]),
+//         y: normalize(rawY, maxY),
+//         z: normalize(rawZ, maxZ),
+//         rawX: d[xAxis],
+//         rawY,
+//         rawZ,
+//       };
+//     });
+
+//     const palette = [0xff6f61, 0x6a5acd, 0x40e0d0, 0xffc107, 0x8bc34a, 0xe91e63];
+//     const objects = [];
+
+//     mapped.forEach((d, i) => {
+//       const mat = new THREE.MeshStandardMaterial({ color: palette[i % palette.length] });
+//       let mesh;
+//       if (chartType === "bar") {
+//         const h = d.y <= 0 ? 0.1 : d.y;
+//         const geo = new THREE.BoxGeometry(0.5, h, 0.5);
+//         mesh = new THREE.Mesh(geo, mat);
+//         mesh.position.set(d.x, h / 2, d.z);
+//       } else {
+//         const geo = new THREE.SphereGeometry(0.3, 16, 16);
+//         mesh = new THREE.Mesh(geo, mat);
+//         mesh.position.set(d.x, d.y, d.z);
+//       }
+//       mesh.userData = d;
+//       scene.add(mesh);
+//       objects.push(mesh);
+//     });
+
+//     // Add X axis labels
+//     if (font) {
+//       categories.forEach((cat, i) => {
+//         addLabel(String(cat), i, -0.5, 0, 0xff4444);
+//       });
+//     }
+
+//     // Tooltip logic
+//     const ray = new THREE.Raycaster();
+//     const mouse = new THREE.Vector2();
+//     const tooltip = tooltipRef.current;
+
+//     const onMove = (e) => {
+//       const bounds = container.getBoundingClientRect();
+//       mouse.x = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
+//       mouse.y = -((e.clientY - bounds.top) / bounds.height) * 2 + 1;
+//       ray.setFromCamera(mouse, camera);
+//       const hit = ray.intersectObjects(objects);
+//       if (hit.length) {
+//         const { rawX, rawY, rawZ } = hit[0].object.userData;
+//         tooltip.style.display = "block";
+//         tooltip.style.left = e.clientX + "px";
+//         tooltip.style.top = e.clientY + "px";
+//         tooltip.innerHTML = `X: ${rawX}<br>Y: ${rawY}<br>Z: ${rawZ}`;
+//       } else {
+//         tooltip.style.display = "none";
+//       }
+//     };
+
+//     container.addEventListener("mousemove", onMove);
+
+//     const animate = () => {
+//       controls.update();
+//       renderer.render(scene, camera);
+//       requestAnimationFrame(animate);
+//     };
+//     animate();
+
+//     return () => {
+//       controls.dispose();
+//       renderer.dispose();
+//       container.innerHTML = "";
+//       container.removeEventListener("mousemove", onMove);
+//     };
+//   }, [chartData, chartType, xAxis, yAxis, zAxis, font]);
+
+//   // Expose canvas to parent
+//   React.useImperativeHandle(ref, () => ({
+//     getCanvas: () => {
+//       return containerRef.current?.querySelector("canvas");
+//     },
+//   }));
+
+//   return (
+//     <div style={{ position: "relative" }}>
+//       <div ref={containerRef} style={{ width: "100%", height: 500 }} />
+//       <div
+//         ref={tooltipRef}
+//         style={{
+//           position: "absolute",
+//           display: "none",
+//           background: "#222",
+//           color: "#fff",
+//           padding: 5,
+//           borderRadius: 4,
+//           fontSize: 12,
+//           pointerEvents: "none",
+//           zIndex: 10,
+//         }}
+//       />
+//     </div>
+//   );
+// };
+
+// export default React.forwardRef(ThreeDChart);
+
+
+
+import React, { useRef, useEffect, useState, useImperativeHandle, forwardRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
-import helvetikerFont from 'three/examples/fonts/helvetiker_regular.typeface.json';
+
+// Font URL
+const FONT_URL = "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json";
 
 const ThreeDChart = forwardRef(({ chartData, chartType = "scatter", xAxis = "x", yAxis = "y", zAxis = "z" }, ref) => {
-  const mountRef = useRef(null);
-  const rendererRef = useRef(null);
+  const containerRef = useRef();
+  const tooltipRef = useRef();
   const [font, setFont] = useState(null);
 
+  // Load font once
+  useEffect(() => {
+    const loader = new FontLoader();
+    loader.load(FONT_URL, setFont, undefined, err => console.error("Font load error:", err));
+  }, []);
+
   useImperativeHandle(ref, () => ({
-    getCanvas: () => rendererRef.current?.domElement || null,
+    getCanvas: () => containerRef.current?.querySelector("canvas"),
   }));
 
   useEffect(() => {
-    const loader = new FontLoader();
-    setFont(loader.parse(helvetikerFont));
-  }, []);
+    if (!chartData?.length) return;
 
-  useEffect(() => {
-    if (!chartData || !chartData.length || !font) return;
-
-    const container = mountRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
-    while (container.firstChild) container.removeChild(container.firstChild);
+    const container = containerRef.current;
+    const { width, height } = container.getBoundingClientRect();
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
 
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+    camera.position.set(10, 10, 10);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
-    rendererRef.current = renderer;
+    container.innerHTML = "";
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(20, 30, 10);
-    scene.add(dirLight);
+    const dl = new THREE.DirectionalLight(0xffffff, 1);
+    dl.position.set(20, 30, 20);
+    scene.add(dl);
 
-    let minX = Infinity, maxX = -Infinity;
-    let minY = Infinity, maxY = -Infinity;
-    let minZ = Infinity, maxZ = -Infinity;
+    // Grid helper with spacing
+    scene.add(new THREE.GridHelper(50, 25, 0x888888, 0xcccccc));
+    scene.add(new THREE.AxesHelper(5));
 
-    chartData.forEach((item) => {
-      const x = parseFloat(item[xAxis]);
-      const y = parseFloat(item[yAxis]);
-      const z = parseFloat(item[zAxis]) || 0;
-      if (isNaN(x) || isNaN(y) || isNaN(z)) return;
-      minX = Math.min(minX, x);
-      maxX = Math.max(maxX, x);
-      minY = Math.min(minY, y);
-      maxY = Math.max(maxY, y);
-      minZ = Math.min(minZ, z);
-      maxZ = Math.max(maxZ, z);
-    });
-
-    const axisLength = Math.max(maxX - minX, maxY - minY, maxZ - minZ) + 5;
-    const tickSpacing = Math.ceil(axisLength / 6);
-
-    const axes = {
-      x: { dir: new THREE.Vector3(1, 0, 0), color: 0xff4444, label: "X" },
-      y: { dir: new THREE.Vector3(0, 1, 0), color: 0x44ff44, label: "Y" },
-      z: { dir: new THREE.Vector3(0, 0, 1), color: 0x4444ff, label: "Z" },
+    const addLabel = (text, x, y, z, color = 0x000000) => {
+      if (!font) return;
+      const shapes = font.generateShapes(text, 0.3);
+      const geom = new THREE.ShapeGeometry(shapes);
+      geom.computeBoundingBox();
+      const xMid = -0.5 * (geom.boundingBox.max.x - geom.boundingBox.min.x);
+      geom.translate(xMid, 0, 0);
+      const mat = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide });
+      const textMesh = new THREE.Mesh(geom, mat);
+      textMesh.position.set(x, y, z);
+      scene.add(textMesh);
     };
 
-    Object.entries(axes).forEach(([axis, { dir, color, label }]) => {
-      const arrow = new THREE.ArrowHelper(dir, new THREE.Vector3(0, 0, 0), axisLength, color);
-      scene.add(arrow);
-      addTextLabel(label, ...dir.clone().multiplyScalar(axisLength + 1).toArray(), color);
+    // Normalize y and z to keep them in view
+    const categories = [...new Set(chartData.map(d => d[xAxis]))];
+    const maxY = Math.max(...chartData.map(d => parseFloat(d[yAxis]) || 0));
+    const maxZ = Math.max(...chartData.map(d => parseFloat(d[zAxis]) || 0));
+    const normalize = (val, max) => (max > 0 ? (val / max) * 5 : 0);
+    const spacing = 3;
+
+    const objects = [];
+    const mapped = chartData.map(d => {
+      const rawY = parseFloat(d[yAxis]) || 0,
+            rawZ = parseFloat(d[zAxis]) || 0;
+      return {
+        x: categories.indexOf(d[xAxis]) * spacing,
+        y: normalize(rawY, maxY),
+        z: normalize(rawZ, maxZ) * spacing,
+        rawX: d[xAxis],
+        rawY,
+        rawZ,
+      };
     });
 
-    for (let i = tickSpacing; i <= axisLength; i += tickSpacing) {
-      createTick([i, 0, 0], [i, 0.5, 0]);
-      addTextLabel(`${i}`, i, -1, 0);
-      createTick([0, i, 0], [0.5, i, 0]);
-      addTextLabel(`${i}`, -1.2, i, 0);
-      createTick([0, 0, i], [0.5, 0, i]);
-      addTextLabel(`${i}`, -1.2, 0, i);
-    }
-
-    function createTick(from, to) {
-      const geom = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(...from),
-        new THREE.Vector3(...to),
-      ]);
-      const line = new THREE.Line(geom, new THREE.LineBasicMaterial({ color: 0x999999 }));
-      scene.add(line);
-    }
-
-    function addTextLabel(text, x, y, z, color = 0x000000) {
-      const geometry = new TextGeometry(text, {
-        font,
-        size: 0.5,
-        height: 0.05,
-      });
-      const material = new THREE.MeshBasicMaterial({ color });
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(x, y, z);
-      scene.add(mesh);
-    }
-
-    const palette = [
-      0xff6f61, 0x6a5acd, 0x40e0d0, 0xffc107,
-      0x8bc34a, 0xe91e63, 0x3f51b5, 0x009688
-    ];
-
-    chartData.forEach((item, i) => {
-      let x = parseFloat(item[xAxis]) - minX;
-      let y = parseFloat(item[yAxis]) - minY;
-      let z = parseFloat(item[zAxis]) - minZ || 0;
-      if (isNaN(x) || isNaN(y) || isNaN(z)) return;
-
-      const color = palette[i % palette.length];
-      const material = new THREE.MeshStandardMaterial({ color });
+    mapped.forEach((d, i) => {
+      const mat = new THREE.MeshStandardMaterial({ color: [0xff6f61, 0x6a5acd, 0x40e0d0, 0xffc107, 0x8bc34a, 0xe91e63][i % 6] });
       let mesh;
 
       if (chartType === "bar") {
-        const height = y;
-        mesh = new THREE.Mesh(new THREE.BoxGeometry(1, height, 1), material);
-        mesh.position.set(x, height / 2, z);
+        const h = d.y <= 0 ? 0.1 : d.y;
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(1, h, 1), mat);
+        mesh.position.set(d.x, h / 2, d.z);
       } else {
-        mesh = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), material);
-        mesh.position.set(x, y, z);
+        mesh = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 16), mat);
+        mesh.position.set(d.x, d.y, d.z);
       }
 
+      mesh.userData = d;
       scene.add(mesh);
+      objects.push(mesh);
     });
 
-    
+    if (font) {
+      categories.forEach((cat, i) => {
+        addLabel(String(cat), i * spacing, -0.5, 0, 0xff4444);
+      });
+    }
 
+    const ray = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
-    camera.position.set(axisLength, axisLength, axisLength);
-    camera.lookAt(0, 0, 0);
+    const onMove = e => {
+      const b = container.getBoundingClientRect();
+      mouse.x = ((e.clientX - b.left) / b.width) * 2 - 1;
+      mouse.y = -((e.clientY - b.top) / b.height) * 2 + 1;
+      ray.setFromCamera(mouse, camera);
+      const hit = ray.intersectObjects(objects);
+      if (hit.length) {
+        const { rawX, rawY, rawZ } = hit[0].object.userData;
+        tooltipRef.current.style.display = "block";
+        tooltipRef.current.style.left = e.clientX + "px";
+        tooltipRef.current.style.top = e.clientY + "px";
+        tooltipRef.current.innerHTML = `X: ${rawX}<br>Y: ${rawY}<br>Z: ${rawZ}`;
+      } else {
+        tooltipRef.current.style.display = "none";
+      }
+    };
+
+    container.addEventListener("mousemove", onMove);
 
     const animate = () => {
-      renderer.render(scene, camera);
       controls.update();
+      renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
     animate();
@@ -693,16 +1235,34 @@ const ThreeDChart = forwardRef(({ chartData, chartType = "scatter", xAxis = "x",
     return () => {
       controls.dispose();
       renderer.dispose();
-      if (renderer.domElement && container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      container.innerHTML = "";
+      container.removeEventListener("mousemove", onMove);
     };
-  }, [chartData, chartType, font, xAxis, yAxis, zAxis]);
+  }, [chartData, chartType, xAxis, yAxis, zAxis, font]);
 
-  return <div ref={mountRef} style={{ width: "100%", height: "600px" }} />;
+  return (
+    <div style={{ position: "relative" }}>
+      <div ref={containerRef} style={{ width: "100%", height: 500 }} />
+      <div
+        ref={tooltipRef}
+        style={{
+          position: "absolute",
+          display: "none",
+          background: "#222",
+          color: "#fff",
+          padding: "4px 8px",
+          borderRadius: 4,
+          fontSize: 12,
+          pointerEvents: "none",
+          zIndex: 10,
+        }}
+      />
+    </div>
+  );
 });
 
 export default ThreeDChart;
+
 
 
 
