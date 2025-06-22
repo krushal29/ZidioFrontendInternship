@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { backendurl } from '../App';
 
 
 const ChangePasswordModal = ({ onClose }) => {
@@ -19,7 +20,7 @@ const ChangePasswordModal = ({ onClose }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post('http://localhost:80/api/user/changePassword', {
+      const res = await axios.post(`${backendurl}/user/changePassword`, {
         oldPassword,
         newPassword
       }, {

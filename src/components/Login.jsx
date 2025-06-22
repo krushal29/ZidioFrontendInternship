@@ -5,6 +5,7 @@ import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { backendurl } from "../App";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -62,7 +63,7 @@ const Login = () => {
     }
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost/api/user/login", formData, {
+      const response = await axios.post(`${backendurl}/user/login`, formData, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -90,7 +91,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost/api/user/forgotPassword", forgotData, {
+      const res = await axios.post(`${backendurl}/user/forgotPassword`, forgotData, {
         headers: { "Content-Type": "application/json" },
       });
 
@@ -288,13 +289,13 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-600 mb-4">Or continue with</p>
             <div className="flex justify-center gap-4">
-              <a href="http://localhost:80/api/user/google">
+              <a href={`${backendurl}/user/google`}>
                 <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
                   <FontAwesomeIcon icon={faGoogle} className=" " />
                   Google
                 </button>
               </a>
-              <a href="http://localhost:80/api/user/github">
+              <a href={`${backendurl}/user/github`}>
                 <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-200 transition">
                   <FontAwesomeIcon icon={faGithub} className="text-black" />
                   GitHub

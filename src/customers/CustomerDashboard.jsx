@@ -63,6 +63,7 @@ import Sidebar from './CustomerSidebar';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import ChangePasswordModal from './ChangePasswordModal';
+import { backendurl } from '../App';
 
 
 const CustomerDashboard = () => {
@@ -84,14 +85,14 @@ const CustomerDashboard = () => {
         const headers = { Authorization: `Bearer ${token}` };
 
         // Fetch uploaded files
-        const fileRes = await axios.get('http://localhost:80/api/excel/ExcelAllData', { headers });
+        const fileRes = await axios.get(`${backendurl}/excel/ExcelAllData`, { headers });
         const sortedFiles = fileRes.data.message.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
         setFiles(sortedFiles.slice(0, 5)); // Last 5 files
 
         // Fetch user info
-        const userRes = await axios.get('http://localhost:80/api/user/profile', { headers });
+        const userRes = await axios.get(`${backendurl}/user/profile`, { headers });
          const storedLastLogin = localStorage.getItem('lastLogin');
           const userWithLastLogin = {
         ...userRes.data.user,
@@ -111,7 +112,7 @@ const CustomerDashboard = () => {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:80/api/excel/userStats", {
+        const res = await axios.get(`${backendurl}/excel/userStats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.data.success) setStats(res.data);

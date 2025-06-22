@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { faFile } from "@fortawesome/free-solid-svg-icons";
 import { Chart } from "chart.js";
+import {backendurl} from '../App'
 
 const Sidebar = () => {
   const location = useLocation();
@@ -33,7 +34,7 @@ const Sidebar = () => {
 
   try {
     await axios.post(
-      "http://localhost/api/user/logout",
+      `${backendurl}/user/logout`,
       {},
       {
         headers: {

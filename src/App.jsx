@@ -16,6 +16,8 @@ import AnalyzeData from './customers/AnalyzeData';
 import Analytics from './Admin/Analytics';
 
 
+export const backendurl=import.meta.env.VITE_BACKEND_URL
+
 const App = () => {
   return (
     <>

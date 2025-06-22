@@ -387,6 +387,7 @@
   import Sidebar from './CustomerSidebar';
   import jsPDF from "jspdf";
   import ThreeDChart from "./ThreeDChart";
+import { backendurl } from "../App";
 
   const AnalyzeData = () => {
     const [files, setFiles] = useState([]);
@@ -417,7 +418,7 @@
       try {
         setLoading(true);
         setLoadingMessage("Fetching uploaded files...");
-        const res = await axios.get("http://localhost:80/api/excel/ExcelAllData", {
+        const res = await axios.get(`${backendurl}/excel/ExcelAllData`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data.data) setFiles(res.data.message);
@@ -437,14 +438,14 @@
       try {
         setLoading(true);
         setLoadingMessage("Loading file and analyzing data...");
-        const res = await axios.get(`http://localhost:80/api/excel/get/${fileId}`, {
+        const res = await axios.get(`${backendurl}/excel/get/${fileId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         if (res.data.success) {
           const fileMeta = res.data.data;
           const analyzeRes = await axios.post(
-            "http://localhost:80/api/excel/fetchData",
+            `${backendurl}/excel/fetchData`,
             { url: fileMeta?.FileURl },
             { headers: { Authorization: `Bearer ${token}` } }
           );
@@ -485,7 +486,7 @@
         setLoadingMessage(`Generating ${chartType.toUpperCase()} chart...`);
 
         const res = await axios.post(
-          "http://localhost:80/api/excel/fetchData",
+          `${backendurl}/excel/fetchData`,
           {
             url: fileData.FileURl,
             xAxis: selectedXAxis,
@@ -589,7 +590,7 @@
 const countGraphUsage = async (graphType, graphDimension) => {
   try {
     await axios.post(
-      "http://localhost:80/api/graph/CountGraph",
+      `${backendurl}/graph/CountGraph`,
       { graphType, graphDimension },
       {
         headers: {
@@ -631,7 +632,7 @@ console.log("X axis:", selectedXAxis, "Y axis:", selectedYAxis, "Z axis:", selec
     setLoading(true);
     setLoadingMessage("Generating 3D chart...");
 
-    const res = await axios.post("http://localhost:80/api/excel/analyze3DData", payload, {
+    const res = await axios.post(`${backendurl}/excel/analyze3DData`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

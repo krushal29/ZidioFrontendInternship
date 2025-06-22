@@ -76,6 +76,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import {backendurl} from '../App'
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -88,7 +89,7 @@ const Analytics = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:80/api/admin/users', {
+      .get(`${backendurl}/admin/users`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -101,7 +102,7 @@ const Analytics = () => {
   const handleSearch = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:80/api/admin/reports/by-username/${encodeURIComponent(searchName)}`,
+        `${backendurl}/admin/reports/by-username/${encodeURIComponent(searchName)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

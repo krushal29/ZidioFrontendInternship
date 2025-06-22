@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminDashboard from './AdminDashboard';
 import axios from 'axios';
 import AdminSidebar from './AdminSidebar';
+import { backendurl } from '../App';
 
 const Reports = () => {
   const [reports, setReports] = useState([]);
@@ -11,7 +12,7 @@ const Reports = () => {
 
  const fetchReports = async () => {
   try {
-    const res = await axios.get('http://localhost:80/api/admin/reports', {
+    const res = await axios.get(`${backendurl}/admin/reports`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log('Fetched reports:', res.data); // log full response
@@ -24,7 +25,7 @@ const Reports = () => {
 
   const handleReview = async (reportId) => {
     try {
-      await axios.put(`http://localhost:80/api/admin/reports/${reportId}/review`, {}, {
+      await axios.put(`${backendurl}/admin/reports/${reportId}/review`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchReports();

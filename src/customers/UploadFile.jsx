@@ -664,6 +664,7 @@ ChartJS.register(
   MatrixController,
   MatrixElement
 );
+import {backendurl} from '../App'
 
 
 const UploadFile = () => {
@@ -706,7 +707,7 @@ const chartRef = useRef(null);
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:80/api/excel/uploadExcelFile", formData, {
+      const res = await axios.post(`${backendurl}/excel/uploadExcelFile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -715,7 +716,7 @@ const chartRef = useRef(null);
       if (res.data.success) {
         toast.success("File uploaded successfully!");
         setFile(null);
-        const allData = await axios.get("http://localhost:80/api/excel/ExcelAllData", {
+        const allData = await axios.get(`${backendurl}/excel/ExcelAllData`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const latest = allData.data.message.at(-1);

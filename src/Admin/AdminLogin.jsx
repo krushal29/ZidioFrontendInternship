@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import {backendurl} from '../App'
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const AdminLogin = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post("http://localhost:80/api/admin/admin-login", formData);
+      const response = await axios.post(`${backendurl}/admin/admin-login`, formData);
       setSuccess(response.data.message);
 
       // localStorage.setItem("token", response.data.token);

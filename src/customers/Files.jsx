@@ -6,6 +6,7 @@ import Sidebar from './CustomerSidebar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { jsPDF } from "jspdf";
+import {backendurl} from '../App'
 
 
 const Files = () => {
@@ -22,7 +23,7 @@ const Files = () => {
 
   const fetchFiles = async () => {
     try {
-      const res = await axios.get("http://localhost:80/api/excel/ExcelAllData", {
+      const res = await axios.get(`${backendurl}/excel/ExcelAllData`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -41,7 +42,7 @@ const Files = () => {
     if (!confirm) return;
 
     try {
-      const res = await axios.delete(`http://localhost:80/api/excel/delete/${fileId}`, {
+      const res = await axios.delete(`${backendurl}/excel/delete/${fileId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -60,7 +61,7 @@ const Files = () => {
     setAiModalOpen(true);
     setFetchingOverview(true);
     try {
-      const res = await axios.get(`http://localhost:80/api/excel/overview/${fileId}`, {
+      const res = await axios.get(`${backendurl}/excel/overview/${fileId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.data) {

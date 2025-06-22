@@ -210,6 +210,7 @@ import AdminSidebar from "./AdminSidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { backendurl } from "../App";
 
 // Chart.js imports
 import { Bar } from "react-chartjs-2";
@@ -246,7 +247,7 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:80/api/admin/dashboard-stats", {
+      const res = await axios.get(`${backendurl}/admin/dashboard-stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStats(res.data);
@@ -257,7 +258,7 @@ const AdminDashboard = () => {
 
   const fetchGraphCounts = async () => {
     try {
-      const res = await axios.get("http://localhost:80/api/graph/getCountGraph", {
+      const res = await axios.get(`${backendurl}/graph/getCountGraph`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -272,7 +273,7 @@ const AdminDashboard = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:80/api/admin/users", {
+      const res = await axios.get(`${backendurl}/admin/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data.users || []);
@@ -285,7 +286,7 @@ const AdminDashboard = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:80/api/admin/users/${id}`, {
+      await axios.delete(`${backendurl}/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();
@@ -299,7 +300,7 @@ const AdminDashboard = () => {
     const newRole = currentRole === "user" ? "admin" : "user";
     try {
       await axios.put(
-        `http://localhost:80/api/admin/users/${id}`,
+        `${backendurl}/admin/users/${id}`,
         { role: newRole },
         {
           headers: { Authorization: `Bearer ${token}` },
